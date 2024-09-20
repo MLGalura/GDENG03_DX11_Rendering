@@ -9,7 +9,7 @@ int main()
 
 		while (app.isRunning()) {
 			app.broadcast();
-		}  
+		}
 	}
 
 
