@@ -1,4 +1,5 @@
 #include "AppWindow.h"
+#include <Windows.h>
 
 struct vec3 {
 	float x, y, z;
@@ -6,7 +7,15 @@ struct vec3 {
 
 struct vertex {
 	vec3 position;
+	vec3 position1;
 	vec3 color;
+	vec3 color1;
+};
+
+// DX11 handles vid memory in chunks of 16 bytes, anything more, make sure its aligned or a multiple of 16
+__declspec(align(16))
+struct constant {
+	unsigned int m_time;
 };
 
 AppWindow::AppWindow()
@@ -27,10 +36,10 @@ void AppWindow::onCreate()
 
 	vertex list[] = {
 
-		{-0.5f, -0.5f, 0.0f,	1, 0, 0},
-		{-0.5f, 0.5f, 0.0f,		0, 1, 0},
-		{0.5f, -0.5f, 0.0f,		0, 0, 1},
-		{0.5f, 0.5f, 0.0f,		1, 1, 0}
+		{-0.5f, -0.5f, 0.0f,	-0.32f, -0.11f, 0.0f,	0, 0, 0,	0, 1, 0},
+		{-0.5f, 0.5f, 0.0f,		-0.11f, 0.78f, 0.0f,	1, 1, 0,	0, 1, 1},
+		{0.5f, -0.5f, 0.0f,		0.75f, -0.73f, 0.0f,	0, 0, 1,	1, 0, 0},
+		{0.5f, 0.5f, 0.0f,		0.88f, 0.77f, 0.0f,		1, 1, 1,	0, 0, 1}
 
 		/* OLD RECTANGLE
 		{-0.5f, -0.5f, 0.0f}, // POS 1
@@ -65,6 +74,12 @@ void AppWindow::onCreate()
 	GraphicsEngine::get()->releaseCompiledShader();
 
 	//GraphicsEngine::get()->getShaderBufferAndSize(&shader_byte_code, &size_shader);
+
+	constant cc;
+	cc.m_time = 0;
+
+	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
+	this->m_cb->load(&cc, sizeof(constant) );
 }
 
 void AppWindow::onUpdate()
@@ -74,6 +89,15 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
 	// GraphicsEngine::get()->setShaders();
+
+	constant cc;
+	cc.m_time = ::GetTickCount();
+
+	this->m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
+
+	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
+	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
+
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(this->m_vs);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(this->m_ps);
 
