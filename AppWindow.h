@@ -9,6 +9,9 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 
+#include "Quad.h"
+#include <vector>
+
 class AppWindow : public Window
 {
 public:
@@ -28,5 +31,8 @@ private:
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
+
+private:
+	std::vector<Quad*> m_QuadList;
 };
 

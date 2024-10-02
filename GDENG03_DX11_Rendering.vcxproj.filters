@@ -31,6 +31,9 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
     </ClCompile>
+    <ClCompile Include="Quad.cpp">
+      <Filter>Trials</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -59,6 +62,9 @@
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Quad.h">
+      <Filter>Trials</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +97,9 @@
     </Filter>
     <Filter Include="GameEngine\GraphicsEngine\ConstantBuffer">
       <UniqueIdentifier>{18daeea0-11af-4c73-905e-ae8af9f6040b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Trials">
+      <UniqueIdentifier>{da63bbc1-c1e0-49e1-8fc2-068604214c5c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

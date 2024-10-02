@@ -34,6 +34,15 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
+	this->m_QuadList.push_back(new Quad(-0.5f, -0.25f));
+	this->m_QuadList.push_back(new Quad(0.5f, -0.25f));
+	this->m_QuadList.push_back(new Quad(-0.0f, 0.5f));
+
+	for (auto& quad : this->m_QuadList) {
+		quad->initialize();
+	}
+
+	/*
 	vertex list[] = {
 
 		{-0.5f, -0.5f, 0.0f,	-0.32f, -0.11f, 0.0f,	0, 0, 0,	0, 1, 0},
@@ -41,7 +50,8 @@ void AppWindow::onCreate()
 		{0.5f, -0.5f, 0.0f,		0.75f, -0.73f, 0.0f,	0, 0, 1,	1, 0, 0},
 		{0.5f, 0.5f, 0.0f,		0.88f, 0.77f, 0.0f,		1, 1, 1,	0, 0, 1}
 
-		/* OLD RECTANGLE
+		/* 
+		OLD RECTANGLE
 		{-0.5f, -0.5f, 0.0f}, // POS 1
 		{-0.5f, 0.5f, 0.0f}, // POS 2
 		{0.5f, 0.5f, 0.0f}, // POS 3
@@ -49,7 +59,6 @@ void AppWindow::onCreate()
 		{0.5f, 0.5f, 0.0f}, // POS 1
 		{0.5f, -0.5f, 0.0f}, // POS 2
 		{-0.5f, -0.5f, 0.0f} // POS 3
-		*/
 	};
 
 	this->m_vb = GraphicsEngine::get()->createVertexBuffer();
@@ -80,6 +89,7 @@ void AppWindow::onCreate()
 
 	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
 	this->m_cb->load(&cc, sizeof(constant) );
+		*/
 }
 
 void AppWindow::onUpdate()
@@ -90,26 +100,19 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
 	// GraphicsEngine::get()->setShaders();
 
-	constant cc;
-	cc.m_time = ::GetTickCount();
-
-	this->m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
-
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
-
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(this->m_vs);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(this->m_ps);
-
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb); 
-	// GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleList(m_vb->getSizeVertexList(), 0); // OLD RECTANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
+	for (auto& quad : this->m_QuadList) {
+		quad->update();
+	}
 
 	this->m_swap_chain->present(true); //false??
 }
 
 void AppWindow::onDestroy()
 {
+	for (auto& quad : this->m_QuadList) {
+		quad->release();
+	}
+
 	Window::onDestroy();
 	this->m_vb->release();
 	this->m_swap_chain->release();
