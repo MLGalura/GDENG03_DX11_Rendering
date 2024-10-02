@@ -18,7 +18,7 @@ struct constant {
 	unsigned int m_time;
 };
 
-AppWindow::AppWindow()
+AppWindow::AppWindow() : spawntimer(0.0f)
 {
 }
 
@@ -38,9 +38,13 @@ void AppWindow::onCreate()
 	this->m_QuadList.push_back(new Quad(0.5f, -0.25f));
 	this->m_QuadList.push_back(new Quad(-0.0f, 0.5f));
 
-	for (auto& quad : this->m_QuadList) {
+	/*for (auto& quad : this->m_QuadList) {
 		quad->initialize();
-	}
+	}*/
+
+	/*for (auto& particle : this->m_particleList) {
+		particle->initialize();
+	}*/
 
 	/*
 	vertex list[] = {
@@ -100,8 +104,28 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
 	// GraphicsEngine::get()->setShaders();
 
-	for (auto& quad : this->m_QuadList) {
+	/*for (auto& quad : this->m_QuadList) {
 		quad->update();
+	}*/
+
+	// CHECK - hard coded for delta time, find function to fix
+	this->spawntimer += 0.016f;
+
+	if (this->spawntimer >= 0.25f) {
+		this->spawntimer = 0.0f;
+
+		// Random X and Y positions between -1.0f and 1.0f
+		float randXpos = (rand() / (float)RAND_MAX) * 0.3f - 0.15f;
+		float randYpos = (rand() / (float)RAND_MAX) * 0.0f - 0.15f;
+
+		// Random lifetime between 3.0f and 8.0f
+		float randLT = 3.0f + ((rand() / (float)RAND_MAX) * 5.0f);
+
+		this->m_particleList.push_back(new Particle(randXpos, randYpos, 0.0f, 0.0f, randLT));
+	}
+
+	for (auto& particle : this->m_particleList) {
+		particle->update();
 	}
 
 	this->m_swap_chain->present(true); //false??
@@ -109,9 +133,14 @@ void AppWindow::onUpdate()
 
 void AppWindow::onDestroy()
 {
-	for (auto& quad : this->m_QuadList) {
+	/*for (auto& quad : this->m_QuadList) {
 		quad->release();
+	}*/
+
+	for (auto& particle : this->m_particleList) {
+		particle->release();
 	}
+	m_particleList.clear();
 
 	Window::onDestroy();
 	this->m_vb->release();

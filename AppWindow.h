@@ -10,6 +10,7 @@
 #include "PixelShader.h"
 
 #include "Quad.h"
+#include "Particle.h"
 #include <vector>
 
 class AppWindow : public Window
@@ -33,6 +34,8 @@ private:
 	ConstantBuffer* m_cb;
 
 private:
+	float spawntimer;
 	std::vector<Quad*> m_QuadList;
+	std::vector<Particle*> m_particleList;
 };
 
