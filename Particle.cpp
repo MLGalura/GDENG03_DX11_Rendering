@@ -23,10 +23,10 @@ struct constant
 Particle::Particle(float x, float y, float velX, float velY, float lifetime) : m_lifetime(lifetime)
 {
     vertex list[] = {
-        {{x - 0.05f, y - 0.05f, 0.0f}, {x - 0.05f, y - 0.05f, 0.0f}, {0, 0, 1}, {1, 0, 0}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
-        {{x - 0.05f, y + 0.05f, 0.0f}, {x - 0.05f, y + 0.05f, 0.0f}, {0, 1, 0}, {1, 1, 0}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
-        {{x + 0.05f, y - 0.05f, 0.0f}, {x + 0.05f, y - 0.05f, 0.0f}, {1, 0, 0}, {0, 0, 1}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
-        {{x + 0.05f, y + 0.05f, 0.0f}, {x + 0.05f, y + 0.05f, 0.0f}, {1, 1, 1}, {0, 0, 1}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}}
+        {{x - 0.035f, y - 0.05f, 0.0f}, {x, y, 0.0f}, {0, 0, 1}, {1, 0, 0}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
+        {{x - 0.035f, y + 0.05f, 0.0f}, {x, y, 0.0f}, {0, 1, 0}, {1, 1, 0}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
+        {{x + 0.035f, y - 0.05f, 0.0f}, {x, y, 0.0f}, {1, 0, 0}, {0, 0, 1}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
+        {{x + 0.035f, y + 0.05f, 0.0f}, {x, y, 0.0f}, {1, 1, 1}, {0, 0, 1}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}}
     };
 
     this->m_vb = GraphicsEngine::get()->createVertexBuffer();
@@ -59,11 +59,14 @@ Particle::~Particle()
 
 void Particle::update()
 {
-    // Update particle age
+    // CHECK - hard coded for delta time, find function to fix
     m_age += 0.016f;
 
-    // If the particle's age exceeds its lifetime, it should "die" (could involve removing it)
-    if (m_age >= m_lifetime) return;
+    // Particle dies if age exceeds lifetime
+    if (m_age >= m_lifetime) {
+        //this->release();
+        return;
+    }
 
     // Update constant buffer
     constant cc;
@@ -82,6 +85,8 @@ void Particle::update()
 
 void Particle::release()
 {
+    std::cout << "WOW" << std::endl;
+
     this->m_vb->release();
     this->m_cb->release();
     this->m_vs->release();

@@ -116,12 +116,16 @@ void AppWindow::onUpdate()
 
 		// Random X and Y positions between -1.0f and 1.0f
 		float randXpos = (rand() / (float)RAND_MAX) * 0.3f - 0.15f;
-		float randYpos = (rand() / (float)RAND_MAX) * 0.0f - 0.15f;
+		float randYpos = (rand() / (float)RAND_MAX) * -0.25f - 0.15f;
+
+		// Random X velocity - only -2.0f or 2.0f
+		float randXVel = (rand() % 2 == 0) ? -2.0f : 2.0f;
+		float randYVel = (rand() / (float)RAND_MAX) * 0.3f - 0.15f;
 
 		// Random lifetime between 3.0f and 8.0f
 		float randLT = 3.0f + ((rand() / (float)RAND_MAX) * 5.0f);
 
-		this->m_particleList.push_back(new Particle(randXpos, randYpos, 0.0f, 0.0f, randLT));
+		this->m_particleList.push_back(new Particle(randXpos, randYpos, randXVel, 0.25f, randLT));
 	}
 
 	for (auto& particle : this->m_particleList) {

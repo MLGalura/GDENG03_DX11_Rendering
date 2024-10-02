@@ -7,6 +7,7 @@
 #include "GraphicsEngine.h"
 
 #include <vector>
+#include <iostream>
 
 class Particle
 {
