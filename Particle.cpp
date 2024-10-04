@@ -22,6 +22,7 @@ struct constant
 
 Particle::Particle(float x, float y, float velX, float velY, float lifetime) : m_lifetime(lifetime)
 {
+    // Init Pos - Target Pos - Init Color - Target Color - x velocity - y velocity
     vertex list[] = {
         {{x - 0.035f, y - 0.05f, 0.0f}, {x, y, 0.0f}, {0, 0, 1}, {1, 0, 0}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
         {{x - 0.035f, y + 0.05f, 0.0f}, {x, y, 0.0f}, {0, 1, 0}, {1, 1, 0}, {velX, 0.0f, 0.0f}, {0.0f, velY, 0.0f}},
@@ -85,8 +86,6 @@ void Particle::update()
 
 void Particle::release()
 {
-    std::cout << "WOW" << std::endl;
-
     this->m_vb->release();
     this->m_cb->release();
     this->m_vs->release();

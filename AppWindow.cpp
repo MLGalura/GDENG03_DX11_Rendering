@@ -34,66 +34,6 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
-	this->m_QuadList.push_back(new Quad(-0.5f, -0.25f));
-	this->m_QuadList.push_back(new Quad(0.5f, -0.25f));
-	this->m_QuadList.push_back(new Quad(-0.0f, 0.5f));
-
-	/*for (auto& quad : this->m_QuadList) {
-		quad->initialize();
-	}*/
-
-	/*for (auto& particle : this->m_particleList) {
-		particle->initialize();
-	}*/
-
-	/*
-	vertex list[] = {
-
-		{-0.5f, -0.5f, 0.0f,	-0.32f, -0.11f, 0.0f,	0, 0, 0,	0, 1, 0},
-		{-0.5f, 0.5f, 0.0f,		-0.11f, 0.78f, 0.0f,	1, 1, 0,	0, 1, 1},
-		{0.5f, -0.5f, 0.0f,		0.75f, -0.73f, 0.0f,	0, 0, 1,	1, 0, 0},
-		{0.5f, 0.5f, 0.0f,		0.88f, 0.77f, 0.0f,		1, 1, 1,	0, 0, 1}
-
-		/* 
-		OLD RECTANGLE
-		{-0.5f, -0.5f, 0.0f}, // POS 1
-		{-0.5f, 0.5f, 0.0f}, // POS 2
-		{0.5f, 0.5f, 0.0f}, // POS 3
-
-		{0.5f, 0.5f, 0.0f}, // POS 1
-		{0.5f, -0.5f, 0.0f}, // POS 2
-		{-0.5f, -0.5f, 0.0f} // POS 3
-	};
-
-	this->m_vb = GraphicsEngine::get()->createVertexBuffer();
-	UINT size_list = ARRAYSIZE(list); 
-
-	// GraphicsEngine::get()->createShaders();
-
-	void* shader_byte_code = nullptr;
-	size_t size_shader = 0; 
-
-	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
-
-	this->m_vs = GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
-	this->m_vb->load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
-
-	GraphicsEngine::get()->releaseCompiledShader();
-	
-	
-	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
-
-	this->m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
-	GraphicsEngine::get()->releaseCompiledShader();
-
-	//GraphicsEngine::get()->getShaderBufferAndSize(&shader_byte_code, &size_shader);
-
-	constant cc;
-	cc.m_time = 0;
-
-	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
-	this->m_cb->load(&cc, sizeof(constant) );
-		*/
 }
 
 void AppWindow::onUpdate()
@@ -102,44 +42,40 @@ void AppWindow::onUpdate()
 
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
-	// GraphicsEngine::get()->setShaders();
-
-	/*for (auto& quad : this->m_QuadList) {
-		quad->update();
-	}*/
 
 	// CHECK - hard coded for delta time, find function to fix
 	this->spawntimer += 0.016f;
 
-	if (this->spawntimer >= 0.25f) {
+	if (this->spawntimer >= .15f) {
 		this->spawntimer = 0.0f;
 
-		// Random X and Y positions between -1.0f and 1.0f
-		float randXpos = (rand() / (float)RAND_MAX) * 0.3f - 0.15f;
-		float randYpos = (rand() / (float)RAND_MAX) * -0.25f - 0.15f;
+		// Spawns in bursts
+		for (int i = 0; i < 1; i++) {
+			// Random X and Y positions between -1.0f and 1.0f
+			float randXpos = (rand() / (float)RAND_MAX) * 0.3f - 0.15f;
+			float randYpos = (rand() / (float)RAND_MAX) * -0.25f - 0.15f;
 
-		// Random X velocity - only -2.0f or 2.0f
-		float randXVel = (rand() % 2 == 0) ? -2.0f : 2.0f;
-		float randYVel = (rand() / (float)RAND_MAX) * 0.3f - 0.15f;
+			// Random X velocity - only -2.0f or 2.0f
+			//float randXVel = (rand() % 2 == 0) ? -2.0f : 2.0f;
+			float randXVel = (rand() / (float)RAND_MAX) * 2.0f - 2.0f;
+			float randYVel = (rand() / (float)RAND_MAX) * 0.3f - 0.15f;
 
-		// Random lifetime between 3.0f and 8.0f
-		float randLT = 3.0f + ((rand() / (float)RAND_MAX) * 5.0f);
+			// Random lifetime between 3.0f and 8.0f
+			float randLT = 3.0f + ((rand() / (float)RAND_MAX) * 5.0f);
 
-		this->m_particleList.push_back(new Particle(randXpos, randYpos, randXVel, 0.25f, randLT));
+			this->m_particleList.push_back(new Particle(randXpos, randYpos, randXVel, 0.25f, randLT));
+		}
 	}
 
 	for (auto& particle : this->m_particleList) {
 		particle->update();
 	}
 
-	this->m_swap_chain->present(true); //false??
+	this->m_swap_chain->present(true); 
 }
 
 void AppWindow::onDestroy()
 {
-	/*for (auto& quad : this->m_QuadList) {
-		quad->release();
-	}*/
 
 	for (auto& particle : this->m_particleList) {
 		particle->release();

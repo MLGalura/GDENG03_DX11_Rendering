@@ -24,10 +24,15 @@ private:
     float m_lifetime;
     float m_age = 0.0f;
 
+    bool m_isDead = false;
+
 private:
     VertexBuffer* m_vb;
     ConstantBuffer* m_cb;
     VertexShader* m_vs;
     PixelShader* m_ps;
+
+public:
+    bool IsDead();
 };
 
