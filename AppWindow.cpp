@@ -36,10 +36,10 @@ void AppWindow::onCreate()
 
 	vertex list[] = {
 
-		{-0.5f, -0.5f, 0.0f,	-0.32f, -0.11f, 0.0f,	0, 0, 0,	0, 1, 0},
-		{-0.5f, 0.5f, 0.0f,		-0.11f, 0.78f, 0.0f,	1, 1, 0,	0, 1, 1},
-		{0.5f, -0.5f, 0.0f,		0.75f, -0.73f, 0.0f,	0, 0, 1,	1, 0, 0},
-		{0.5f, 0.5f, 0.0f,		0.88f, 0.77f, 0.0f,		1, 1, 1,	0, 0, 1}
+		{-0.65f, -0.75f, 0.0f,	-0.1f, -0.1f, 0.0f,	0, 0, 0,	0, 1, 0},
+		{-0.70f, 0.3f, 0.0f,		0.1f, 0.75f, 0.0f,	1, 1, 0,	0, 1, 1},
+		{0.1f, -0.3f, 0.0f,		0.8f, -0.4f, 0.0f,	0, 0, 1,	1, 0, 0},
+		{0.15f, 0.35f, 0.0f,		0.75f, 0.75f, 0.0f,		1, 1, 1,	0, 0, 1}
 
 		/* OLD RECTANGLE
 		{-0.5f, -0.5f, 0.0f}, // POS 1
@@ -75,6 +75,9 @@ void AppWindow::onCreate()
 
 	//GraphicsEngine::get()->getShaderBufferAndSize(&shader_byte_code, &size_shader);
 
+	// Initialize Engine Time
+	EngineTime::initialize();
+
 	constant cc;
 	cc.m_time = 0;
 
@@ -84,6 +87,8 @@ void AppWindow::onCreate()
 
 void AppWindow::onUpdate()
 {
+	EngineTime::LogFrameStart();
+
 	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.3f, 0.4f, 1);
 
 	RECT rc = this->getClientWindowRect();
@@ -91,7 +96,34 @@ void AppWindow::onUpdate()
 	// GraphicsEngine::get()->setShaders();
 
 	constant cc;
-	cc.m_time = ::GetTickCount();
+
+	double deltaTime = EngineTime::getDeltaTime();
+
+	if (this->isIncreasing)
+	{
+		this->curSpeed += this->lerpSpeed * deltaTime;
+		if (this->curSpeed >= this->maxSpeed)
+		{
+			this->curSpeed = this->maxSpeed;
+			this->isIncreasing = false;
+		}
+	}
+	else
+	{
+		this->curSpeed -= this->lerpSpeed * deltaTime;
+		if (this->curSpeed <= this->minSpeed)
+		{
+			this->curSpeed = this->minSpeed;
+			this->isIncreasing = true;
+		}
+	}
+
+	accumulatedTime += deltaTime * 10000.0f * this->curSpeed;
+
+	cc.m_time = static_cast<UINT>(accumulatedTime);
+
+	//cc.m_time = ::GetTickCount();
+	std::cout << this->curSpeed << std::endl;
 
 	this->m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
@@ -105,7 +137,9 @@ void AppWindow::onUpdate()
 	// GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleList(m_vb->getSizeVertexList(), 0); // OLD RECTANGLE
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
 
-	this->m_swap_chain->present(true); //false??
+	this->m_swap_chain->present(true); 
+	EngineTime::LogFrameEnd();
+
 }
 
 void AppWindow::onDestroy()

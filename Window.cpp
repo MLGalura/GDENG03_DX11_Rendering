@@ -97,10 +97,10 @@ bool Window::release()
 
 bool Window::broadcast()
 {
-	MSG msg;
-
+	//EngineTime::LogFrameStart();
 	// Update can be placed here as broadcast() will be called in the main loop
-	window->onUpdate();
+	this->onUpdate();
+	MSG msg;
 
 	// Retrieves from the queue of messages of the OS until emptied
 	while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0) {
@@ -111,6 +111,7 @@ bool Window::broadcast()
 	// Prevents the CPU from throttling
 	Sleep(1);
 
+	//EngineTime::LogFrameEnd();
 	return true;
 }
 
