@@ -14,6 +14,7 @@ class AppWindow : public Window
 public:
 	// Constructor & Destructor
 	AppWindow();
+	void updateQuadPosition();
 	~AppWindow();
 
 private:
@@ -28,5 +29,13 @@ private:
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
+
+private:
+	float m_old_delta; // Time when previous frame rendered
+	float m_new_delta; // Time when current frame rendered
+	float m_delta_time; // difference between old and new
+
+	float m_delta_pos;
+	float m_delta_scale;
 };
 
