@@ -16,7 +16,7 @@ struct constant {
     unsigned int m_time;
 };
 
-Circle::Circle() : m_radius(0.15f), m_position(0, 0, 0), m_velocity(0.25f, 0.25f, 0), m_scale(0.5f, 0.5f, 0.5f), m_time(0)
+Circle::Circle() : m_radius(0.15f), m_position(0, 0, 0), m_scale(0.5f, 0.5f, 0.5f), m_time(0)
 {
 }
 
@@ -28,8 +28,11 @@ Circle::~Circle()
     m_ps->release();
 }
 
-void Circle::init()
+void Circle::init(float xVel, float yVel)
 {
+    this->m_velocity.m_x = xVel;
+    this->m_velocity.m_y = yVel;
+
     vertex list[] = {
         {Vector3D(-0.5f, -0.5f, 0.0f), Vector3D(-0.32f, -0.11f, 0.0f), Vector3D(0, 0, 0)},
         {Vector3D(-0.5f, 0.5f, 0.0f), Vector3D(-0.11f, 0.78f, 0.0f), Vector3D(1, 1, 0)},

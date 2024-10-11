@@ -17,7 +17,7 @@ public:
     ~Circle();
 
 public:
-    void init();
+    void init(float xVel, float yVel);
     void update(float deltaTime, float windowWidth, float windowHeight);
     void draw();
 

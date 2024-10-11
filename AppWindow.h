@@ -12,6 +12,7 @@
 #include "Vector3D.h"
 #include "Circle.h"
 #include <iostream>
+#include <vector>
 
 class AppWindow : public Window
 {
@@ -50,6 +51,11 @@ private:
 
 private:
 	Circle m_circle;
+	std::vector<Circle*> m_circleList;
 
+private:
+	bool SPACE = false;
+	bool BACK = false;
+	bool DEL = false;
 };
 

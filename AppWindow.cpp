@@ -92,7 +92,7 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
-	m_circle.init();
+	//m_circle.init();
 
 	/*
 	vertex list[] = {
@@ -145,8 +145,68 @@ void AppWindow::onUpdate()
 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(width, height);
 
-	m_circle.update(m_delta_time, width, height);
-	m_circle.draw();
+	// RUDIMENTARY INPUT SYSTEM IMPLEMENTATION
+	short spaceState = ::GetAsyncKeyState(VK_SPACE);
+	short backState = ::GetAsyncKeyState(VK_BACK);
+	short delstate = ::GetAsyncKeyState(VK_DELETE);
+
+	// SPAWNING
+	if ((spaceState & 0x8000) && !SPACE) {
+		float velocities[] = {-0.25f, 0.25f, -0.15f, 0.15f, 0.0f};
+		float randX;
+		float randY;
+
+		randX = velocities[std::rand() % 5];
+
+		if (randX != 0.0f)
+			randY = velocities[std::rand() % 5];
+
+		else
+			randY = velocities[std::rand() % 4];
+
+
+		this->m_circleList.push_back(new Circle());
+		this->m_circleList[this->m_circleList.size()-1]->init(randX, randY); 
+
+		SPACE = true;
+		std::cout << "[SPACEBAR] was pressed. Spawning new Circle." << std::endl;
+	}
+
+	else if (!(spaceState & 0x8000) && SPACE)
+		SPACE = false;
+
+	// POPPING
+	if ((backState & 0x8000) && !BACK)
+	{
+		if (!m_circleList.empty())  
+			m_circleList.pop_back(); 
+
+		BACK = true;  
+		std::cout << "[BACKSPACE] was pressed. Popping the Circle vector." << std::endl;
+	}
+
+	else if (!(backState & 0x8000) && BACK)
+		BACK = false; 
+
+	// DELETING
+	if ((delstate & 0x8000) && !DEL)
+	{
+		this->m_circleList.clear();
+		DEL = true;
+	}
+	else if (!(delstate & 0x8000) && DEL)
+		DEL = false;
+
+	if (this->m_circleList.size() > 0) 
+	{
+		for (auto& circle : this->m_circleList) {
+			circle->update(m_delta_time, width, height);
+			circle->draw();
+		}
+	}
+
+	//m_circle.update(m_delta_time, width, height);
+	//m_circle.draw();
 	// GraphicsEngine::get()->setShaders();
 	
 	/*
