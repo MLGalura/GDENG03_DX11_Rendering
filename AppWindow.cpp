@@ -92,6 +92,9 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
+	m_circle.init();
+
+	/*
 	vertex list[] = {
 		{Vector3D(-0.5f, -0.5f, 0.0f), Vector3D(-0.32f, -0.11f, 0.0f), Vector3D(0, 0, 0), {0.0f, 0.0f}},
 		{Vector3D(-0.5f,  0.5f, 0.0f), Vector3D(-0.11f,  0.78f, 0.0f), Vector3D(1, 1, 0), {0.0f, 1.0f}},
@@ -128,6 +131,7 @@ void AppWindow::onCreate()
 
 	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
 	this->m_cb->load(&cc, sizeof(constant) );
+	*/
 }
 
 void AppWindow::onUpdate()
@@ -135,10 +139,17 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0, 0, 1);
 
 	RECT rc = this->getClientWindowRect();
-	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
+
+	float width = rc.right - rc.left;
+	float height = rc.bottom - rc.top;
+
+	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(width, height);
+
+	m_circle.update(m_delta_time, width, height);
+	m_circle.draw();
 	// GraphicsEngine::get()->setShaders();
 	
-
+	/*
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
 
@@ -148,6 +159,7 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb); 
 	// GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleList(m_vb->getSizeVertexList(), 0); // OLD RECTANGLE
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
+	*/
 
 	this->m_swap_chain->present(true);
 
@@ -156,15 +168,15 @@ void AppWindow::onUpdate()
 
 	this->m_delta_time = (this->m_old_delta) ? (this->m_new_delta - this->m_old_delta) / 1000.0f : 0;
 
-	this->updateQuadPosition();
+	//this->updateQuadPosition();
 }
 
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	this->m_vb->release();
+	//this->m_vb->release();
 	this->m_swap_chain->release();
-	this->m_vs->release();
-	this->m_ps->release();
+	/*this->m_vs->release();
+	this->m_ps->release();*/
 	GraphicsEngine::get()->release();
 }

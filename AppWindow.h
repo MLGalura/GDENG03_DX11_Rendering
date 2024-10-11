@@ -10,6 +10,7 @@
 #include "PixelShader.h"
 
 #include "Vector3D.h"
+#include "Circle.h"
 #include <iostream>
 
 class AppWindow : public Window
@@ -46,5 +47,9 @@ private:
 	Vector3D m_pos = Vector3D(0.0f, 0.0f, 0.0f);
 	Vector3D m_velocity = Vector3D(0.1f, 0.1f, 0.0f);
 	float m_speed = 2.5f;
+
+private:
+	Circle m_circle;
+
 };
 

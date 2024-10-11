@@ -31,6 +31,9 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
     </ClCompile>
+    <ClCompile Include="Circle.cpp">
+      <Filter>GameEngine\Trial</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -66,6 +69,9 @@
     <ClInclude Include="Matrix4x4.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>GameEngine\Trial</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -100,6 +106,9 @@
     </Filter>
     <Filter Include="GameEngine\Math">
       <UniqueIdentifier>{9a6bd9e7-3976-45be-9258-c16b3d46d118}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Trial">
+      <UniqueIdentifier>{c6aec1b2-dd10-48c9-a5c7-7bd892c306e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
