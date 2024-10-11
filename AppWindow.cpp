@@ -3,11 +3,15 @@
 #include "Vector3D.h"
 #include "Matrix4x4.h"
 
+struct vec2 {
+	float x, y;
+};
+
 struct vertex {
 	Vector3D position;
-	Vector3D position1;
 	Vector3D color;
 	Vector3D color1;
+	vec2 uv;
 };
 
 // DX11 handles vid memory in chunks of 16 bytes, anything more, make sure its aligned or a multiple of 16
@@ -20,6 +24,8 @@ struct constant {
 	unsigned int m_time;
 };
 
+Vector3D m_velocity = Vector3D(0.5f, 0.5f, 0.0f); 
+
 AppWindow::AppWindow()
 {
 }
@@ -29,33 +35,49 @@ void AppWindow::updateQuadPosition()
 	constant cc;
 	cc.m_time = ::GetTickCount();
 
-	this->m_delta_pos += this->m_delta_time / 10.0f;
+	// Update position based on velocity and delta time
+	m_pos.m_x += m_velocity.m_x * m_delta_time * m_speed;
+	m_pos.m_y += m_velocity.m_y * m_delta_time * m_speed;
 
-	if (this->m_delta_pos > 1.0f)
-		this->m_delta_pos = 0.0f;
-
+	// Apply translation based on updated position
 	Matrix4x4 temp;
+	temp.setTranslation(m_pos);
 
-	// cc.m_world.setTranslation(Vector3D::lerp(Vector3D(-2.0f, -2.0f, 0.0f), Vector3D(2.0f, 2.0f, 0), this->m_delta_pos));
-
-	this->m_delta_scale += this->m_delta_time / 0.15f;
-
-	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5f, 0.0f), Vector3D(1.0f, 1.0f, 0), (sin(this->m_delta_scale) + 1.0f) / 2.0f));
-
-	temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0.0f), Vector3D(1.5f, 1.5f, 0), this->m_delta_pos));
-
+	// Set scale and multiply by the translation matrix
+	cc.m_world.setScale(Vector3D(0.5f, 0.5f, 0.5f));
 	cc.m_world *= temp;
 
+	// Apply view and projection matrices
 	cc.m_view.setIdentity();
-	cc.m_proj.setOrthoLH
-	(
+	cc.m_proj.setOrthoLH(
 		(this->getClientWindowRect().right - this->getClientWindowRect().left) / 400.0f,
 		(this->getClientWindowRect().bottom - this->getClientWindowRect().top) / 400.0f,
-		-4.0f,
-		4.0f
+		-4.0f, 4.0f
 	);
 
+	// Update the constant buffer with the new world matrix
 	this->m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
+
+	// Check for collisions with the window borders and bounce
+	this->checkBorders();
+}
+
+void AppWindow::checkBorders()
+{
+	RECT rc = this->getClientWindowRect();
+	float windowWidth = (rc.right - rc.left) / 400.0f; 
+	float windowHeight = (rc.bottom - rc.top) / 400.0f; 
+
+	float halfWidth = 0.15f;  
+	float halfHeight = 0.15f; 
+
+	// Check if hitting the left or right borders
+	if (m_pos.m_x - halfWidth <= -windowWidth / 2.0f || m_pos.m_x + halfWidth >= windowWidth / 2.0f)
+		m_velocity.m_x = -m_velocity.m_x; // Reverse the X direction
+
+	// Check if hitting the top or bottom borders
+	if (m_pos.m_y - halfHeight <= -windowHeight / 2.0f || m_pos.m_y + halfHeight >= windowHeight / 2.0f)
+		m_velocity.m_y = -m_velocity.m_y; // Reverse the Y direction
 }
 
 AppWindow::~AppWindow()
@@ -71,12 +93,12 @@ void AppWindow::onCreate()
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
 	vertex list[] = {
-
-		{Vector3D(-0.5f, -0.5f, 0.0f),		Vector3D(-0.32f, -0.11f, 0.0f),		Vector3D(0, 0, 0),	Vector3D(0, 1, 0)},
-		{Vector3D(-0.5f, 0.5f, 0.0f),		Vector3D(-0.11f, 0.78f, 0.0f),		Vector3D(1, 1, 0),	Vector3D(0, 1, 1)},
-		{Vector3D(0.5f, -0.5f, 0.0f),		Vector3D(0.75f, -0.73f, 0.0f),		Vector3D(0, 0, 1),	Vector3D(1, 0, 0)},
-		{Vector3D(0.5f, 0.5f, 0.0f),		Vector3D(0.88f, 0.77f, 0.0f),		Vector3D(1, 1, 1),	Vector3D(0, 0, 1)}
+		{Vector3D(-0.5f, -0.5f, 0.0f), Vector3D(-0.32f, -0.11f, 0.0f), Vector3D(0, 0, 0), {0.0f, 0.0f}},
+		{Vector3D(-0.5f,  0.5f, 0.0f), Vector3D(-0.11f,  0.78f, 0.0f), Vector3D(1, 1, 0), {0.0f, 1.0f}},
+		{Vector3D(0.5f, -0.5f, 0.0f), Vector3D(0.75f, -0.73f, 0.0f), Vector3D(0, 0, 1), {1.0f, 0.0f}},
+		{Vector3D(0.5f,  0.5f, 0.0f), Vector3D(0.88f,  0.77f, 0.0f), Vector3D(1, 1, 1), {1.0f, 1.0f}}
 	};
+
 
 	this->m_vb = GraphicsEngine::get()->createVertexBuffer();
 	UINT size_list = ARRAYSIZE(list); 
@@ -110,13 +132,12 @@ void AppWindow::onCreate()
 
 void AppWindow::onUpdate()
 {
-	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.3f, 0.4f, 1);
+	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0, 0, 1);
 
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
 	// GraphicsEngine::get()->setShaders();
 	
-	this->updateQuadPosition();
 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
@@ -134,6 +155,8 @@ void AppWindow::onUpdate()
 	this->m_new_delta = ::GetTickCount();
 
 	this->m_delta_time = (this->m_old_delta) ? (this->m_new_delta - this->m_old_delta) / 1000.0f : 0;
+
+	this->updateQuadPosition();
 }
 
 void AppWindow::onDestroy()

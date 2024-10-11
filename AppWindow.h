@@ -9,12 +9,16 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 
+#include "Vector3D.h"
+#include <iostream>
+
 class AppWindow : public Window
 {
 public:
 	// Constructor & Destructor
 	AppWindow();
 	void updateQuadPosition();
+	void checkBorders();
 	~AppWindow();
 
 private:
@@ -37,5 +41,10 @@ private:
 
 	float m_delta_pos;
 	float m_delta_scale;
+
+private:
+	Vector3D m_pos = Vector3D(0.0f, 0.0f, 0.0f);
+	Vector3D m_velocity = Vector3D(0.1f, 0.1f, 0.0f);
+	float m_speed = 2.5f;
 };
 
