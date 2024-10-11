@@ -22,10 +22,6 @@ Circle::Circle() : m_radius(0.15f), m_position(0, 0, 0), m_scale(0.5f, 0.5f, 0.5
 
 Circle::~Circle()
 {
-    m_cb->release();
-    m_vb->release();
-    m_vs->release();
-    m_ps->release();
 }
 
 void Circle::init(float xVel, float yVel)

@@ -91,47 +91,6 @@ void AppWindow::onCreate()
 
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
-
-	//m_circle.init();
-
-	/*
-	vertex list[] = {
-		{Vector3D(-0.5f, -0.5f, 0.0f), Vector3D(-0.32f, -0.11f, 0.0f), Vector3D(0, 0, 0), {0.0f, 0.0f}},
-		{Vector3D(-0.5f,  0.5f, 0.0f), Vector3D(-0.11f,  0.78f, 0.0f), Vector3D(1, 1, 0), {0.0f, 1.0f}},
-		{Vector3D(0.5f, -0.5f, 0.0f), Vector3D(0.75f, -0.73f, 0.0f), Vector3D(0, 0, 1), {1.0f, 0.0f}},
-		{Vector3D(0.5f,  0.5f, 0.0f), Vector3D(0.88f,  0.77f, 0.0f), Vector3D(1, 1, 1), {1.0f, 1.0f}}
-	};
-
-
-	this->m_vb = GraphicsEngine::get()->createVertexBuffer();
-	UINT size_list = ARRAYSIZE(list); 
-
-	// GraphicsEngine::get()->createShaders();
-
-	void* shader_byte_code = nullptr;
-	size_t size_shader = 0; 
-
-	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
-
-	this->m_vs = GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
-	this->m_vb->load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
-
-	GraphicsEngine::get()->releaseCompiledShader();
-	
-	
-	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
-
-	this->m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
-	GraphicsEngine::get()->releaseCompiledShader();
-
-	//GraphicsEngine::get()->getShaderBufferAndSize(&shader_byte_code, &size_shader);
-
-	constant cc;
-	cc.m_time = 0;
-
-	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
-	this->m_cb->load(&cc, sizeof(constant) );
-	*/
 }
 
 void AppWindow::onUpdate()
@@ -149,6 +108,7 @@ void AppWindow::onUpdate()
 	short spaceState = ::GetAsyncKeyState(VK_SPACE);
 	short backState = ::GetAsyncKeyState(VK_BACK);
 	short delstate = ::GetAsyncKeyState(VK_DELETE);
+	short escstate = ::GetAsyncKeyState(VK_ESCAPE);
 
 	// SPAWNING
 	if ((spaceState & 0x8000) && !SPACE) {
@@ -178,11 +138,15 @@ void AppWindow::onUpdate()
 	// POPPING
 	if ((backState & 0x8000) && !BACK)
 	{
-		if (!m_circleList.empty())  
+		if (!m_circleList.empty()) {
 			m_circleList.pop_back(); 
+			std::cout << "[BACKSPACE] was pressed. Popping the Circle vector." << std::endl;
+		}
+
+		else
+			std::cout << "[BACKSPACE] was pressed, but no Circles in vector." << std::endl;
 
 		BACK = true;  
-		std::cout << "[BACKSPACE] was pressed. Popping the Circle vector." << std::endl;
 	}
 
 	else if (!(backState & 0x8000) && BACK)
@@ -193,9 +157,12 @@ void AppWindow::onUpdate()
 	{
 		this->m_circleList.clear();
 		DEL = true;
+		std::cout << "[DELETE] was pressed. Clearing the Circle vector." << std::endl;
 	}
+
 	else if (!(delstate & 0x8000) && DEL)
 		DEL = false;
+
 
 	if (this->m_circleList.size() > 0) 
 	{
@@ -205,23 +172,13 @@ void AppWindow::onUpdate()
 		}
 	}
 
-	//m_circle.update(m_delta_time, width, height);
-	//m_circle.draw();
-	// GraphicsEngine::get()->setShaders();
-	
-	/*
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
-
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(this->m_vs);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(this->m_ps);
-
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb); 
-	// GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleList(m_vb->getSizeVertexList(), 0); // OLD RECTANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
-	*/
-
 	this->m_swap_chain->present(true);
+
+	// EXITING
+	if (escstate & 0x8000) {
+		this->onDestroy();
+		std::cout << "[ESCAPE] was pressed. Terminating the program." << std::endl;
+	}
 
 	this->m_old_delta = this->m_new_delta;
 	this->m_new_delta = ::GetTickCount();
