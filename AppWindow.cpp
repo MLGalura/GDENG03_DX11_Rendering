@@ -1,7 +1,8 @@
 #include "AppWindow.h"
 #include <Windows.h>
 #include "Vector3D.h"
-#include "Matrix4x4.h"
+
+#include <random>
 
 struct vertex {
 	Vector3D position;
@@ -86,6 +87,18 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
+	std::default_random_engine generator;
+	std::uniform_real_distribution<float> posDist(-0.75f, 0.75f);
+	std::uniform_real_distribution<float> rotDist(0.1f, 3.0f);
+
+	for (int i = 0; i < 100; ++i) {
+		Vector3D randomPosition(posDist(generator), posDist(generator), 0.0f);
+		Vector3D randomVelocity(rotDist(generator), rotDist(generator), rotDist(generator));
+
+		this->m_cubeList.push_back(new Cube());
+		this->m_cubeList[i]->init(randomVelocity, randomPosition);
+	}
+	 /*
 	vertex vertex_list[] = {
 		// FRONT FACE
 		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
@@ -99,6 +112,17 @@ void AppWindow::onCreate()
 		{Vector3D(-0.5f, 0.5f, 0.5f),	Vector3D(0, 1, 1),	Vector3D(0, 0.2f, 0.2f)},
 		{Vector3D(-0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)}
 	};
+
+	std::default_random_engine generator;
+	std::uniform_real_distribution<float> distribution(-0.5f, 0.5f);
+
+	for (int i = 0; i < 100; ++i) {
+		Vector3D randomPosition(distribution(generator), distribution(generator), 0.0f);
+		Matrix4x4 translationMatrix;
+		translationMatrix.setTranslation(randomPosition);
+
+		
+	}
 
 	this->m_vb = GraphicsEngine::get()->createVertexBuffer();
 	UINT size_list = ARRAYSIZE(vertex_list);
@@ -145,19 +169,18 @@ void AppWindow::onCreate()
 
 	GraphicsEngine::get()->releaseCompiledShader();
 	
-	
 	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
 
 	this->m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->releaseCompiledShader();
 
-	//GraphicsEngine::get()->getShaderBufferAndSize(&shader_byte_code, &size_shader);
 
 	constant cc;
 	cc.m_time = 0;
 
 	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
 	this->m_cb->load(&cc, sizeof(constant) );
+	 */
 }
 
 void AppWindow::onUpdate()
@@ -168,7 +191,15 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
 	// GraphicsEngine::get()->setShaders();
 	
-	this->updateQuadPosition();
+	float width = rc.right - rc.left;
+	float height = rc.bottom - rc.top;
+
+	for (auto& cube : this->m_cubeList) {
+		cube->update(this->m_delta_time, width, height); 
+		cube->draw();
+	}
+
+	/*this->updateQuadPosition();
 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
@@ -179,7 +210,7 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb); 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_ib); 
 
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
+	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);*/
 
 	this->m_swap_chain->present(true);
 
@@ -192,11 +223,11 @@ void AppWindow::onUpdate()
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	this->m_vb->release();
-	this->m_ib->release();
-	this->m_cb->release();
+	//this->m_vb->release();
+	//this->m_ib->release();
+	//this->m_cb->release();
 	this->m_swap_chain->release();
-	this->m_vs->release();
-	this->m_ps->release();
+	//this->m_vs->release();
+	//this->m_ps->release();
 	GraphicsEngine::get()->release();
 }

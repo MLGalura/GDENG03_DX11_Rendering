@@ -10,6 +10,10 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 
+#include "Matrix4x4.h"
+#include "Cube.h"
+#include <vector>
+
 class AppWindow : public Window
 {
 public:
@@ -39,5 +43,7 @@ private:
 
 	float m_delta_pos;
 	float m_delta_scale;
+
+	std::vector<Cube*> m_cubeList; 
 };
 
