@@ -25,6 +25,10 @@ public:
 		return v;
 	}
 
+	static Vector3D zeros() {
+		return Vector3D(0.0f, 0.0f, 0.0f);
+	}
+
 	~Vector3D() {
 
 	}
