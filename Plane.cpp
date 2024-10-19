@@ -1,12 +1,12 @@
-#include "Cube.h"
+#include "Plane.h"
 #include "GraphicsEngine.h"
 
 #include <Windows.h>
 
 struct vertex {
-	Vector3D position;
-	Vector3D color;
-	Vector3D color1;
+    Vector3D position;
+    Vector3D color;
+    Vector3D color1;
 };
 
 __declspec(align(16))
@@ -17,37 +17,28 @@ struct constant {
     unsigned int m_time;
 };
 
-Cube::Cube()
-{
-
-}
-
-Cube::~Cube()
+Plane::Plane()
 {
 }
 
-void Cube::init(Vector3D vel, Vector3D pos)
+Plane::~Plane()
 {
-    this->velocity.m_x = vel.m_x;
-    this->velocity.m_y = vel.m_y;
-    this->velocity.m_z = vel.m_z;
+}
 
-	this->position.m_x = pos.m_x;
-	this->position.m_y = pos.m_y;
-	this->position.m_z = pos.m_z;
-
+void Plane::init(Vector3D pos)
+{
 	vertex vertex_list[] = {
 		// FRONT FACE
-		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
-		{Vector3D(-0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 0),	Vector3D(0.2f, 0.2f, 1)},
-		{Vector3D(0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 0),	Vector3D(0.2f, 0.2f, 0)},
-		{Vector3D(0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
+		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(-0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(0.5f, -0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
 
 		// BACK FACE
-		{Vector3D(0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)},
-		{Vector3D(0.5f, 0.5f, 0.5f),	Vector3D(0, 1, 1),	Vector3D(0, 0.2f, 0.2f)},
-		{Vector3D(-0.5f, 0.5f, 0.5f),	Vector3D(0, 1, 1),	Vector3D(0, 0.2f, 0.2f)},
-		{Vector3D(-0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)}
+		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(-0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(0.5f, -0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)}
 	};
 
 	this->vertexBuffer = GraphicsEngine::get()->createVertexBuffer();
@@ -108,40 +99,30 @@ void Cube::init(Vector3D vel, Vector3D pos)
 	this->constantBuffer->load(&cc, sizeof(constant));
 }
 
-void Cube::update(float deltaTime, float windowWidth, float windowHeight)
+void Plane::update(float deltaTime, float windowWidth, float windowHeight)
 {
-	Vector3D rotSpeed;
-
-	this->animSpeed.m_x += deltaTime * this->velocity.m_x;
-	this->animSpeed.m_y += deltaTime * this->velocity.m_y;
-	this->animSpeed.m_z += deltaTime * this->velocity.m_z;
-
 	constant cc;
 	cc.m_time = ::GetTickCount();
 
-	cc.m_world.setScale(Vector3D(0.25f, 0.55f, 0.25f));
-	
-	Matrix4x4 rotationMatrix;
+	cc.m_world.setScale(Vector3D(0.75f, 0.75f, 0.25f));
+
+	this->deltaPos += deltaTime / 1.0f;
+
 	Matrix4x4 translationMatrix;
-
-	rotationMatrix.setIdentity();
-	rotationMatrix.setRotationZ(this->animSpeed.m_z);
-
-	cc.m_world *= rotationMatrix;
-
-	rotationMatrix.setIdentity(); 
-	rotationMatrix.setRotationY(this->animSpeed.m_y);
-
-	cc.m_world *= rotationMatrix;
-
-	rotationMatrix.setIdentity(); 
-	rotationMatrix.setRotationX(this->animSpeed.m_x);
-
-	cc.m_world *= rotationMatrix;
-
+	Matrix4x4 rotationMatrix;
 
 	translationMatrix.setIdentity();
-	translationMatrix.setTranslation(this->position);
+	translationMatrix.setTranslation(Vector3D::lerp(Vector3D(-0.25f, 0.0f, 0.0f), Vector3D(0.25f, 0.0f, 0), (sin(this->deltaPos) + 1.0f) / 2.0f));
+
+	//rotationMatrix.setIdentity();
+	//rotationMatrix.setRotationY(this->deltaPos * 10);
+
+	//cc.m_world *= rotationMatrix;
+
+	rotationMatrix.setIdentity();
+	rotationMatrix.setRotationX(this->deltaPos);
+
+	cc.m_world *= rotationMatrix;
 
 	cc.m_world *= translationMatrix;
 	cc.m_view.setIdentity();
@@ -150,7 +131,7 @@ void Cube::update(float deltaTime, float windowWidth, float windowHeight)
 	this->constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 }
 
-void Cube::draw()
+void Plane::draw()
 {
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->vertexShader, this->constantBuffer);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->pixelShader, this->constantBuffer);

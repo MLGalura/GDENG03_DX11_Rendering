@@ -91,12 +91,15 @@ void AppWindow::onCreate()
 	std::uniform_real_distribution<float> posDist(-0.75f, 0.75f);
 	std::uniform_real_distribution<float> rotDist(0.1f, 3.0f);
 
-	for (int i = 0; i < 100; ++i) {
-		Vector3D randomPosition(posDist(generator), posDist(generator), 0.0f);
-		Vector3D randomVelocity(rotDist(generator), rotDist(generator), rotDist(generator));
+	for (int i = 0; i < 1; ++i) {
+		Vector3D randomPosition(0.0f, 0.0f, 0.0f);
+		Vector3D randomVelocity(0, 1, 0);
 
 		this->m_cubeList.push_back(new Cube());
 		this->m_cubeList[i]->init(randomVelocity, randomPosition);
+		this->m_plane = new Plane();
+		this->m_plane->init(randomPosition);
+
 	}
 	 /*
 	vertex vertex_list[] = {
@@ -198,6 +201,9 @@ void AppWindow::onUpdate()
 		cube->update(this->m_delta_time, width, height); 
 		cube->draw();
 	}
+
+	this->m_plane->update(this->m_delta_time, width, height);
+	this->m_plane->draw();
 
 	/*this->updateQuadPosition();
 

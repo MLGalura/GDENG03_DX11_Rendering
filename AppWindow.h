@@ -12,6 +12,7 @@
 
 #include "Matrix4x4.h"
 #include "Cube.h"
+#include "Plane.h"
 #include <vector>
 
 class AppWindow : public Window
@@ -45,5 +46,6 @@ private:
 	float m_delta_scale;
 
 	std::vector<Cube*> m_cubeList; 
+	Plane* m_plane;
 };
 

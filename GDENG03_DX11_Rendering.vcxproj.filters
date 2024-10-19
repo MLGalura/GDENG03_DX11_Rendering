@@ -40,6 +40,9 @@
     <ClCompile Include="Cube.cpp">
       <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -82,6 +85,9 @@
       <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
+      <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
       <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
