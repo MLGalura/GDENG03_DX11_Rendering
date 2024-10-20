@@ -29,6 +29,9 @@ public:
 	virtual void onUpdate() = 0;
 	virtual void onDestroy();
 
+	virtual void onFocus() = 0;
+	virtual void onKillFocus() = 0;
+
 protected:
 	HWND m_HWND;
 	bool m_isRunning;

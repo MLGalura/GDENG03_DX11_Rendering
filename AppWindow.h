@@ -45,8 +45,23 @@ private:
 	float m_rot_x = 0.0f;
 	float m_rot_y = 0.0f;
 
+	float m_scale_cube = 1.0f;
+
 	// Inherited via InputListener
 	void onKeyDown(int key) override;
 	void onKeyUp(int key) override;
+
+	// Inherited via InputListener
+	void onMouseMove(const Point& delta_mouse_pos) override;
+
+	// Inherited via Window
+	void onFocus() override;
+	void onKillFocus() override;
+
+	// Inherited via InputListener
+	void onLeftMouseDown(const Point& delta_mouse_pos) override;
+	void onRightMouseDown(const Point& delta_mouse_pos) override;
+	void onLeftMouseUp(const Point& delta_mouse_pos) override;
+	void onRightMouseUp(const Point& delta_mouse_pos) override;
 };
 
