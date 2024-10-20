@@ -10,7 +10,9 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 
-class AppWindow : public Window
+#include "InputListener.h"
+
+class AppWindow : public Window, public InputListener
 {
 public:
 	// Constructor & Destructor
@@ -39,5 +41,12 @@ private:
 
 	float m_delta_pos;
 	float m_delta_scale;
+
+	float m_rot_x = 0.0f;
+	float m_rot_y = 0.0f;
+
+	// Inherited via InputListener
+	void onKeyDown(int key) override;
+	void onKeyUp(int key) override;
 };
 
