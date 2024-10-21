@@ -37,6 +37,9 @@
     <ClCompile Include="InputSystem.cpp">
       <Filter>GameEngine\InputSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="Vector4D.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -127,6 +133,9 @@
     </Filter>
     <Filter Include="GameEngine\InputSystem">
       <UniqueIdentifier>{c87fbfef-7f0d-4991-b173-19d207a7ef63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\GameObjects">
+      <UniqueIdentifier>{a624214f-9f66-4fc9-a95a-6f23d70b4bd0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

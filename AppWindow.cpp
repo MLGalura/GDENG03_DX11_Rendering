@@ -121,6 +121,7 @@ void AppWindow::onCreate()
 
 	this->m_world_cam.setTranslation(Vector3D(0.0f, 0.0f, -2.0f));
 
+
 	vertex vertex_list[] = {
 		// FRONT FACE
 		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},

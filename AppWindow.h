@@ -13,6 +13,8 @@
 #include "Matrix4x4.h"
 #include "InputListener.h"
 
+#include "Cube.h"
+
 class AppWindow : public Window, public InputListener
 {
 public:
