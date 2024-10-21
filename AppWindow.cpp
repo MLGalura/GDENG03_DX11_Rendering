@@ -25,7 +25,7 @@ AppWindow::AppWindow()
 {
 }
 
-void AppWindow::updateQuadPosition()
+void AppWindow::update()
 {
 	constant cc;
 	cc.m_time = ::GetTickCount();
@@ -47,7 +47,7 @@ void AppWindow::updateQuadPosition()
 
 	//cc.m_world *= temp;
 
-	cc.m_world.setScale(Vector3D(this->m_scale_cube, this->m_scale_cube, this->m_scale_cube));
+	/*cc.m_world.setScale(Vector3D(this->m_scale_cube, this->m_scale_cube, this->m_scale_cube));
 
 	temp.setIdentity();
 	temp.setRotationZ(0.0f);
@@ -62,16 +62,42 @@ void AppWindow::updateQuadPosition()
 	temp.setIdentity();
 	temp.setRotationX(this->m_rot_x);
 
-	cc.m_world *= temp;
+	cc.m_world *= temp;*/
 
-	cc.m_view.setIdentity();
-	cc.m_proj.setOrthoLH
+	cc.m_world.setIdentity();
+
+	Matrix4x4 world_cam;
+	world_cam.setIdentity();
+
+	temp.setIdentity();
+	temp.setRotationX(this->m_rot_x);
+	world_cam *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(this->m_rot_y);
+	world_cam *= temp;
+
+	Vector3D new_pos = this->m_world_cam.getTranslation() + world_cam.getZDirection() * (this->m_forward * 0.3f);
+
+	world_cam.setTranslation(new_pos);
+
+	this->m_world_cam = world_cam;
+
+	world_cam.inverse();
+
+	cc.m_view = world_cam;
+	/*cc.m_proj.setOrthoLH
 	(
 		(this->getClientWindowRect().right - this->getClientWindowRect().left) / 300.0f,
 		(this->getClientWindowRect().bottom - this->getClientWindowRect().top) / 300.0f,
 		-4.0f,
 		4.0f
-	);
+	);*/
+
+	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
+	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
+
+	cc.m_proj.setPerspectiveFovLH(1.5f, ((float)width / (float)height), 0.1f, 100.0f);
 
 	this->m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 }
@@ -89,6 +115,8 @@ void AppWindow::onCreate()
 
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
+
+	this->m_world_cam.setTranslation(Vector3D(0.0f, 0.0f, -2.0f));
 
 	vertex vertex_list[] = {
 		// FRONT FACE
@@ -174,7 +202,7 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
 	// GraphicsEngine::get()->setShaders();
 	
-	this->updateQuadPosition();
+	this->update();
 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
@@ -210,10 +238,12 @@ void AppWindow::onDestroy()
 void AppWindow::onKeyDown(int key)
 {
 	if (key == 'W')
-		this->m_rot_x += 3.14f * this->m_delta_time;
+		this->m_forward = 1.0f;
+	//this->m_rot_x += 3.14f * this->m_delta_time;
 
 	else if (key == 'S')
-		this->m_rot_x -= 3.14f * this->m_delta_time;
+		this->m_forward = -1.0f;
+		//this->m_rot_x -= 3.14f * this->m_delta_time;
 	
 	else if (key == 'A')
 		this->m_rot_y += 3.14f * this->m_delta_time;
@@ -224,13 +254,13 @@ void AppWindow::onKeyDown(int key)
 
 void AppWindow::onKeyUp(int key)
 {
-
+	this->m_forward = 0.0f;
 }
 
 void AppWindow::onMouseMove(const Point& delta_mouse_pos)
 {
-	this->m_rot_x -= delta_mouse_pos.m_y * this->m_delta_time;
-	this->m_rot_y -= delta_mouse_pos.m_x * this->m_delta_time;
+	this->m_rot_x += delta_mouse_pos.m_y * this->m_delta_time * 0.1f;
+	this->m_rot_y += delta_mouse_pos.m_x * this->m_delta_time * 0.1f;
 }
 
 void AppWindow::onFocus()

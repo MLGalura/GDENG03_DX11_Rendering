@@ -10,6 +10,7 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 
+#include "Matrix4x4.h"
 #include "InputListener.h"
 
 class AppWindow : public Window, public InputListener
@@ -17,7 +18,7 @@ class AppWindow : public Window, public InputListener
 public:
 	// Constructor & Destructor
 	AppWindow();
-	void updateQuadPosition();
+	void update();
 	~AppWindow();
 
 private:
@@ -46,6 +47,9 @@ private:
 	float m_rot_y = 0.0f;
 
 	float m_scale_cube = 1.0f;
+	float m_forward = 0.0f;
+
+	Matrix4x4 m_world_cam;
 
 	// Inherited via InputListener
 	void onKeyDown(int key) override;
