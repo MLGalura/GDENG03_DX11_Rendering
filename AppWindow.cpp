@@ -79,6 +79,8 @@ void AppWindow::update()
 
 	Vector3D new_pos = this->m_world_cam.getTranslation() + world_cam.getZDirection() * (this->m_forward * 0.3f);
 
+	new_pos = new_pos + world_cam.getXDirection() * (this->m_rightward * 0.3f);
+
 	world_cam.setTranslation(new_pos);
 
 	this->m_world_cam = world_cam;
@@ -109,6 +111,7 @@ AppWindow::~AppWindow()
 void AppWindow::onCreate()
 {
 	InputSystem::get()->addListener(this);
+	InputSystem::get()->showCursor(false);
 
 	GraphicsEngine::get()->init();
 	this->m_swap_chain = GraphicsEngine::get()->createSwapChain();
@@ -246,21 +249,29 @@ void AppWindow::onKeyDown(int key)
 		//this->m_rot_x -= 3.14f * this->m_delta_time;
 	
 	else if (key == 'A')
-		this->m_rot_y += 3.14f * this->m_delta_time;
+		this->m_rightward = -1.0f;
+		//this->m_rot_y += 3.14f * this->m_delta_time;
 
 	else if (key == 'D')
-		this->m_rot_y -= 3.14f * this->m_delta_time;
+		this->m_rightward = 1.0f;
+		//this->m_rot_y -= 3.14f * this->m_delta_time;
 }
 
 void AppWindow::onKeyUp(int key)
 {
 	this->m_forward = 0.0f;
+	this->m_rightward = 0.0f;
 }
 
-void AppWindow::onMouseMove(const Point& delta_mouse_pos)
+void AppWindow::onMouseMove(const Point& mouse_pos)
 {
-	this->m_rot_x += delta_mouse_pos.m_y * this->m_delta_time * 0.1f;
-	this->m_rot_y += delta_mouse_pos.m_x * this->m_delta_time * 0.1f;
+	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
+	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
+
+	this->m_rot_x += (mouse_pos.m_y - (height / 2.0f)) * this->m_delta_time * 0.1f;
+	this->m_rot_y += (mouse_pos.m_x - (width / 2.0f)) * this->m_delta_time * 0.1f;
+
+	InputSystem::get()->setCursorPosition(Point(width / 2.0f, height / 2.0f));
 }
 
 void AppWindow::onFocus()

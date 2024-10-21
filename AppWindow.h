@@ -48,6 +48,7 @@ private:
 
 	float m_scale_cube = 1.0f;
 	float m_forward = 0.0f;
+	float m_rightward = 0.0f;
 
 	Matrix4x4 m_world_cam;
 
@@ -56,7 +57,7 @@ private:
 	void onKeyUp(int key) override;
 
 	// Inherited via InputListener
-	void onMouseMove(const Point& delta_mouse_pos) override;
+	void onMouseMove(const Point& mouse_pos) override;
 
 	// Inherited via Window
 	void onFocus() override;
