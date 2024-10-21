@@ -38,6 +38,10 @@ private:
 	ConstantBuffer* m_cb;
 
 private:
+	Cube* m_cube = nullptr;
+	constant cc;
+
+private:
 	float m_old_delta; // Time when previous frame rendered
 	float m_new_delta; // Time when current frame rendered
 	float m_delta_time; // difference between old and new
@@ -52,6 +56,7 @@ private:
 	float m_forward = 0.0f;
 	float m_rightward = 0.0f;
 
+	Matrix4x4 world_cam;
 	Matrix4x4 m_world_cam;
 
 	// Inherited via InputListener

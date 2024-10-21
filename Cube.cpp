@@ -9,14 +9,6 @@ struct vertex {
 	Vector3D color1;
 };
 
-__declspec(align(16))
-struct constant {
-	Matrix4x4 m_world;
-	Matrix4x4 m_view;
-	Matrix4x4 m_proj;
-	unsigned int m_time;
-};
-
 Cube::Cube()
 {
 
@@ -28,14 +20,6 @@ Cube::~Cube()
 
 void Cube::init(Vector3D vel, Vector3D pos)
 {
-	this->velocity.m_x = vel.m_x;
-	this->velocity.m_y = vel.m_y;
-	this->velocity.m_z = vel.m_z;
-
-	this->position.m_x = pos.m_x;
-	this->position.m_y = pos.m_y;
-	this->position.m_z = pos.m_z;
-
 	vertex vertex_list[] = {
 		// FRONT FACE
 		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
@@ -95,11 +79,11 @@ void Cube::init(Vector3D vel, Vector3D pos)
 
 	GraphicsEngine::get()->releaseCompiledShader();
 
+
 	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
 
 	this->pixelShader = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->releaseCompiledShader();
-
 
 	constant cc;
 	cc.m_time = 0;
@@ -108,44 +92,17 @@ void Cube::init(Vector3D vel, Vector3D pos)
 	this->constantBuffer->load(&cc, sizeof(constant));
 }
 
-void Cube::update(float deltaTime, float windowWidth, float windowHeight)
+void Cube::update(float deltaTime, constant cc2)
 {
-	Vector3D rotSpeed;
-
-	this->animSpeed.m_x += deltaTime * this->velocity.m_x;
-	this->animSpeed.m_y += deltaTime * this->velocity.m_y;
-	this->animSpeed.m_z += deltaTime * this->velocity.m_z;
-
 	constant cc;
 	cc.m_time = ::GetTickCount();
 
-	cc.m_world.setScale(Vector3D(0.25f, 0.55f, 0.25f));
+	Matrix4x4 temp;
+	cc.m_world.setIdentity();
+	cc.m_world.setScale(Vector3D(1.0f, 1.0f, 1.0f));
 
-	Matrix4x4 rotationMatrix;
-	Matrix4x4 translationMatrix;
-
-	rotationMatrix.setIdentity();
-	rotationMatrix.setRotationZ(this->animSpeed.m_z);
-
-	cc.m_world *= rotationMatrix;
-
-	rotationMatrix.setIdentity();
-	rotationMatrix.setRotationY(this->animSpeed.m_y);
-
-	cc.m_world *= rotationMatrix;
-
-	rotationMatrix.setIdentity();
-	rotationMatrix.setRotationX(this->animSpeed.m_x);
-
-	cc.m_world *= rotationMatrix;
-
-
-	translationMatrix.setIdentity();
-	translationMatrix.setTranslation(this->position);
-
-	cc.m_world *= translationMatrix;
-	cc.m_view.setIdentity();
-	cc.m_proj.setOrthoLH(windowWidth / 400.0f, windowHeight / 400.0f, -4.0f, 4.0f);
+	cc.m_view = cc2.m_view;
+	cc.m_proj = cc2.m_proj;
 
 	this->constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 }

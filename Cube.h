@@ -11,6 +11,15 @@
 
 #include <iostream>
 
+__declspec(align(16))
+struct constant {
+	Matrix4x4 m_world;
+	Matrix4x4 m_view;
+	Matrix4x4 m_proj;
+	unsigned int m_time;
+};
+
+
 class Cube
 {
 public:
@@ -19,8 +28,9 @@ public:
 
 public:
 	void init(Vector3D vel, Vector3D pos);
-	void update(float deltaTime, float windowWidth, float windowHeight);
+	void update(float deltaTime, constant cc2);
 	void draw();
+
 
 private:
 	VertexBuffer* vertexBuffer;
@@ -35,4 +45,3 @@ private:
 	Vector3D velocity;
 	Vector3D position;
 };
-

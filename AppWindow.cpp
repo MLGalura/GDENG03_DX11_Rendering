@@ -11,15 +11,6 @@ struct vertex {
 	Vector3D color1;
 };
 
-// DX11 handles vid memory in chunks of 16 bytes, anything more, make sure its aligned or a multiple of 16
-__declspec(align(16))
-struct constant {
-	Matrix4x4 m_world;
-	Matrix4x4 m_view;
-	Matrix4x4 m_proj;
-
-	unsigned int m_time;
-};
 
 AppWindow::AppWindow()
 {
@@ -27,7 +18,6 @@ AppWindow::AppWindow()
 
 void AppWindow::update()
 {
-	constant cc;
 	cc.m_time = ::GetTickCount();
 
 	this->m_delta_pos += this->m_delta_time / 10.0f;
@@ -41,13 +31,15 @@ void AppWindow::update()
 
 	this->m_delta_scale += this->m_delta_time / 1.0f;
 
-	//cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5f, 0.0f), Vector3D(1.0f, 1.0f, 0), (sin(this->m_delta_scale) + 1.0f) / 2.0f));
+	cc.m_world.setIdentity();
+	/*
+	cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5f, 0.5f, 0.5f), Vector3D(1.0f, 1.0f, 1.0f), (sin(this->m_delta_scale) + 1.0f) / 2.0f));
 
-	//temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0.0f), Vector3D(1.5f, 1.5f, 0), this->m_delta_pos));
+	temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0.0f), Vector3D(1.5f, 1.5f, 0), this->m_delta_pos));
 
-	//cc.m_world *= temp;
+	cc.m_world *= temp;
 
-	/*cc.m_world.setScale(Vector3D(this->m_scale_cube, this->m_scale_cube, this->m_scale_cube));
+	cc.m_world.setScale(Vector3D(this->m_scale_cube, this->m_scale_cube, this->m_scale_cube));
 
 	temp.setIdentity();
 	temp.setRotationZ(0.0f);
@@ -64,9 +56,6 @@ void AppWindow::update()
 
 	cc.m_world *= temp;*/
 
-	cc.m_world.setIdentity();
-
-	Matrix4x4 world_cam;
 	world_cam.setIdentity();
 
 	temp.setIdentity();
@@ -121,7 +110,7 @@ void AppWindow::onCreate()
 
 	this->m_world_cam.setTranslation(Vector3D(0.0f, 0.0f, -2.0f));
 
-
+	/*
 	vertex vertex_list[] = {
 		// FRONT FACE
 		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
@@ -186,10 +175,10 @@ void AppWindow::onCreate()
 
 	this->m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->releaseCompiledShader();
+	*/
+	this->m_cube = new Cube();
+	this->m_cube->init(Vector3D(5.0f, 0.0f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f));
 
-	//GraphicsEngine::get()->getShaderBufferAndSize(&shader_byte_code, &size_shader);
-
-	constant cc;
 	cc.m_time = 0;
 
 	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
@@ -206,9 +195,16 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
 	// GraphicsEngine::get()->setShaders();
 	
+	float width = rc.right - rc.left;
+	float height = rc.bottom - rc.top;
+
 	this->update();
 
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
+	this->m_cube->update(this->m_delta_time, this->cc);
+	this->m_cube->draw();
+
+	
+	/*GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(this->m_vs);
@@ -217,7 +213,8 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb); 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_ib); 
 
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
+	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);*/
+	
 
 	this->m_swap_chain->present(true);
 
@@ -230,12 +227,12 @@ void AppWindow::onUpdate()
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	this->m_vb->release();
-	this->m_ib->release();
+	//this->m_vb->release();
+	//this->m_ib->release();
 	this->m_cb->release();
 	this->m_swap_chain->release();
-	this->m_vs->release();
-	this->m_ps->release();
+	//this->m_vs->release();
+	//this->m_ps->release();
 	GraphicsEngine::get()->release();
 }
 
