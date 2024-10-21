@@ -18,20 +18,24 @@ Cube::~Cube()
 {
 }
 
-void Cube::init(Vector3D vel, Vector3D pos)
+void Cube::init(Vector3D vel, Vector3D pos, Vector3D sca)
 {
+	this->velocity = vel;
+	this->position = pos;
+	this->scale = sca;
+
 	vertex vertex_list[] = {
 		// FRONT FACE
-		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
-		{Vector3D(-0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 0),	Vector3D(0.2f, 0.2f, 1)},
-		{Vector3D(0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 0),	Vector3D(0.2f, 0.2f, 0)},
-		{Vector3D(0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
+		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(-0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(0.5f, -0.5f, -0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
 
 		// BACK FACE
-		{Vector3D(0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)},
-		{Vector3D(0.5f, 0.5f, 0.5f),	Vector3D(0, 1, 1),	Vector3D(0, 0.2f, 0.2f)},
-		{Vector3D(-0.5f, 0.5f, 0.5f),	Vector3D(0, 1, 1),	Vector3D(0, 0.2f, 0.2f)},
-		{Vector3D(-0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)}
+		{Vector3D(0.5f, -0.5f, 0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(0.5f, 0.5f, 0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(-0.5f, 0.5f, 0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)},
+		{Vector3D(-0.5f, -0.5f, 0.5f),	Vector3D(1, 1, 1),	Vector3D(1, 1, 1)}
 	};
 
 	this->vertexBuffer = GraphicsEngine::get()->createVertexBuffer();
@@ -97,9 +101,36 @@ void Cube::update(float deltaTime, constant cc2)
 	constant cc;
 	cc.m_time = ::GetTickCount();
 
+	this->m_delta_sca += deltaTime / 1.0f;
+
 	Matrix4x4 temp;
 	cc.m_world.setIdentity();
-	cc.m_world.setScale(Vector3D(1.0f, 1.0f, 1.0f));
+	cc.m_world.setScale(this->scale);
+
+	Matrix4x4 rotMatrix;
+	Matrix4x4 translationMatrix;
+
+	// THE ANIM ISNT BEING USED WHICH IS FO R USUAL ROTATION
+	this->animSpeed.m_x += deltaTime * this->velocity.m_x;
+	this->animSpeed.m_y += deltaTime * this->velocity.m_y;
+	this->animSpeed.m_z += deltaTime * this->velocity.m_z;
+
+	rotMatrix.setIdentity();
+	rotMatrix.setRotationZ(this->velocity.m_z);
+	cc.m_world *= rotMatrix;
+	
+	rotMatrix.setIdentity();
+	rotMatrix.setRotationY(this->velocity.m_y);
+	cc.m_world *= rotMatrix;
+
+	rotMatrix.setIdentity();
+	rotMatrix.setRotationX(this->velocity.m_x);
+	cc.m_world *= rotMatrix;
+
+	translationMatrix.setIdentity();
+	translationMatrix.setTranslation(this->position);
+
+	cc.m_world *= translationMatrix;
 
 	cc.m_view = cc2.m_view;
 	cc.m_proj = cc2.m_proj;

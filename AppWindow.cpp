@@ -4,6 +4,7 @@
 #include "Matrix4x4.h"
 
 #include "InputSystem.h"
+#include <random>
 
 struct vertex {
 	Vector3D position;
@@ -176,8 +177,36 @@ void AppWindow::onCreate()
 	this->m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->releaseCompiledShader();
 	*/
-	this->m_cube = new Cube();
-	this->m_cube->init(Vector3D(5.0f, 0.0f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f));
+	
+	std::default_random_engine generator;
+	std::uniform_real_distribution<float> posDist(-0.75f, 0.75f);
+	std::uniform_real_distribution<float> rotDist(0.1f, 3.0f);
+
+	Vector3D pos(0.0f, -1.0f, 0.0f);
+	Vector3D vel(0.0f, 0.0f, 0.0f);
+	Vector3D sca(7.5f, 0.01f, 7.5f); // initial scale for plane
+
+	this->m_cubeList.push_back(new Cube());
+	this->m_cubeList[0]->init(vel, pos, sca); 
+
+	pos = Vector3D(0.0f, 0.9f, 0.0f);
+	sca = Vector3D(1.0f, 1.0f, 1.0f);
+	
+	this->m_cubeList.push_back(new Cube());
+	this->m_cubeList[1]->init(vel, pos, sca);
+
+	pos = Vector3D(-1.5f, 2.0f, 0.0f);
+
+	this->m_cubeList.push_back(new Cube());
+	this->m_cubeList[2]->init(vel, pos, sca);
+
+	pos = Vector3D(-1.5f, 3.0f, -2.0f);
+
+	this->m_cubeList.push_back(new Cube());
+	this->m_cubeList[3]->init(vel, pos, sca);
+
+	//this->m_cube = new Cube();
+	//this->m_cube->init(Vector3D(5.0f, 0.0f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f));
 
 	cc.m_time = 0;
 
@@ -200,8 +229,12 @@ void AppWindow::onUpdate()
 
 	this->update();
 
-	this->m_cube->update(this->m_delta_time, this->cc);
-	this->m_cube->draw();
+	for (auto& cube : this->m_cubeList) {
+		cube->update(this->m_delta_time, this->cc);
+		cube->draw();
+	}
+	//this->m_cube->update(this->m_delta_time, this->cc);
+	//this->m_cube->draw();
 
 	
 	/*GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);

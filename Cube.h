@@ -27,7 +27,7 @@ public:
 	~Cube();
 
 public:
-	void init(Vector3D vel, Vector3D pos);
+	void init(Vector3D vel, Vector3D pos, Vector3D sca);
 	void update(float deltaTime, constant cc2);
 	void draw();
 
@@ -41,7 +41,10 @@ private:
 	PixelShader* pixelShader;
 
 	Vector3D animSpeed;
+	float m_delta_pos;
+	float m_delta_sca;
 
 	Vector3D velocity;
 	Vector3D position;
+	Vector3D scale;
 };

@@ -13,6 +13,7 @@
 #include "Matrix4x4.h"
 #include "InputListener.h"
 
+#include <vector>
 #include "Cube.h"
 
 class AppWindow : public Window, public InputListener
@@ -38,6 +39,7 @@ private:
 	ConstantBuffer* m_cb;
 
 private:
+	std::vector<Cube*> m_cubeList;
 	Cube* m_cube = nullptr;
 	constant cc;
 
