@@ -1,12 +1,11 @@
 #pragma once
 #include <d3d11.h>
-
-class DeviceContext;
+#include "Prerequisites.h"
 
 class SwapChain
 {
 public:
-	SwapChain();
+	SwapChain(RenderSystem* system);
 	~SwapChain();
 
 	// Initialization and release of SwapChain	
@@ -24,6 +23,7 @@ private:
 
 	ID3D11Texture2D* m_depth_stencil_buffer;
 	ID3D11DepthStencilView* m_dsv;
+	RenderSystem* m_system = nullptr;
 
 private:
 	friend class DeviceContext;

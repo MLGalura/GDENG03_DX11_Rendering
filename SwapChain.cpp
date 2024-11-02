@@ -1,7 +1,7 @@
 #include "SwapChain.h"
-#include "GraphicsEngine.h"
+#include "RenderSystem.h"
 
-SwapChain::SwapChain()
+SwapChain::SwapChain(RenderSystem* system) : m_system(system)
 {
 }
 
@@ -11,7 +11,7 @@ SwapChain::~SwapChain()
 
 bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 {
-	ID3D11Device* device = GraphicsEngine::get()->m_d3d_Device;
+	ID3D11Device* device = m_system->m_d3d_Device;
 
 	// Chain descriptor that handle the angle, size of the window
 	DXGI_SWAP_CHAIN_DESC desc;
@@ -29,7 +29,7 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 	desc.SampleDesc.Quality = 0;
 	desc.Windowed = TRUE;
 
-	HRESULT hr = GraphicsEngine::get()->m_dxgi_factory->CreateSwapChain(device, &desc, &this->m_swap_chain);
+	HRESULT hr = m_system->m_dxgi_factory->CreateSwapChain(device, &desc, &this->m_swap_chain);
 
 	if (FAILED(hr)) {
 		return false;
@@ -69,7 +69,7 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 	if (FAILED(dshr)) return false;
 	buffer->Release();
 
-	ID3D11DeviceContext* context = GraphicsEngine::get()->m_imm_context;
+	ID3D11DeviceContext* context = m_system->m_imm_context;
 	context->OMSetRenderTargets(1, &m_rtv, m_dsv);
 
 	return true;

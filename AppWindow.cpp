@@ -90,7 +90,7 @@ void AppWindow::update()
 
 	cc.m_proj.setPerspectiveFovLH(1.5f, ((float)width / (float)height), 0.1f, 100.0f);
 
-	this->m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
+	this->m_cb->update(GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext(), &cc);
 }
 
 AppWindow::~AppWindow()
@@ -103,7 +103,7 @@ void AppWindow::onCreate()
 	InputSystem::get()->showCursor(false);
 
 	GraphicsEngine::get()->init();
-	this->m_swap_chain = GraphicsEngine::get()->createSwapChain();
+	this->m_swap_chain = GraphicsEngine::get()->getRenderSystem()->createSwapChain();
 
 	RECT rc = this->getClientWindowRect();
 	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
@@ -181,7 +181,7 @@ void AppWindow::onCreate()
 
 	cc.m_time = 0;
 
-	this->m_cb = GraphicsEngine::get()->createConstantBuffer();
+	this->m_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer();
 	this->m_cb->load(&cc, sizeof(constant) );
 }
 
@@ -189,10 +189,10 @@ void AppWindow::onUpdate()
 {
 	InputSystem::get()->update();
 
-	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.3f, 0.4f, 1);
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.3f, 0.4f, 1);
 
 	RECT rc = this->getClientWindowRect();
-	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top); 
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 	// GraphicsEngine::get()->setShaders();
 	
 	float width = rc.right - rc.left;
