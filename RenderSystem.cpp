@@ -76,7 +76,15 @@ bool RenderSystem::release()
 
 SwapChain* RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)
 {
-	return new SwapChain(this, hwnd, width, height);
+	SwapChain* sc = nullptr;
+
+	try {
+		sc = new SwapChain(this, hwnd, width, height);
+	}
+
+	catch (...) {}
+
+	return sc;
 }
 
 DeviceContext* RenderSystem::getImmediateDeviceContext()
@@ -86,28 +94,60 @@ DeviceContext* RenderSystem::getImmediateDeviceContext()
 
 VertexBuffer* RenderSystem::createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader)
 {
-	return new VertexBuffer(this, list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+	VertexBuffer* vb = nullptr;
+
+	try {
+		vb = new VertexBuffer(this, list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+	}
+
+	catch (...) {}
+
+	return vb;
 }
 
 IndexBuffer* RenderSystem::createIndexBuffer(void* list_indices, UINT size_list)
 {
-	return new IndexBuffer(this, list_indices, size_list);
+	IndexBuffer* ib = nullptr;
+
+	try {
+		ib = new IndexBuffer(this, list_indices, size_list);
+	}
+	catch (...) {}
+
+	return ib;;
 }
 
 ConstantBuffer* RenderSystem::createConstantBuffer(void* buffer, UINT size_buffer)
 {
-	return new ConstantBuffer(this, buffer, size_buffer);
+	ConstantBuffer* cb = nullptr;
+
+	try {
+		cb = new ConstantBuffer(this, buffer, size_buffer);
+	}
+	catch (...) {}
+	
+	return cb;
 }
 
 VertexShader* RenderSystem::createVertexShader(const void* shader_byte_code, size_t byte_code_size)
 {
-	VertexShader* vs = new VertexShader(this, shader_byte_code, byte_code_size);
+	VertexShader* vs = nullptr;
+
+	try {
+		vs = new VertexShader(this, shader_byte_code, byte_code_size);
+	}
+	catch (...) {}
 	return vs;
 }
 
 PixelShader* RenderSystem::createPixelShader(const void* shader_byte_code, size_t byte_code_size)
 {
-	PixelShader* ps = new PixelShader(this, shader_byte_code, byte_code_size);
+	PixelShader* ps = nullptr;
+
+	try {
+		ps = new PixelShader(this, shader_byte_code, byte_code_size);
+	}
+	catch (...) {}
 	return ps;
 }
 
