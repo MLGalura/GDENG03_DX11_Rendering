@@ -5,12 +5,9 @@
 class ConstantBuffer
 {
 public:
-	ConstantBuffer(RenderSystem* system);
+	ConstantBuffer(RenderSystem* system, void* buffer, UINT size_buffer);
 	~ConstantBuffer();
-
-	bool load(void* buffer, UINT size_buffer);
 	void update(DeviceContext* context, void* buffer);
-	bool release();
 
 private:
 	UINT m_size_vertex;

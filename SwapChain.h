@@ -5,13 +5,10 @@
 class SwapChain
 {
 public:
-	SwapChain(RenderSystem* system);
+	SwapChain(RenderSystem* system, HWND hwnd, UINT width, UINT height);
 	~SwapChain();
 
-	// Initialization and release of SwapChain	
-	bool init(HWND hwnd, UINT width, UINT height);
 	bool present(bool vsync);
-	bool release();
 
 public:
 	ID3D11RenderTargetView* getRenderTargetView();

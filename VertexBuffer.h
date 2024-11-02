@@ -5,11 +5,8 @@
 class VertexBuffer
 {
 public:
-	VertexBuffer(RenderSystem* system);
+	VertexBuffer(RenderSystem* system, void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
 	~VertexBuffer();
-
-	bool load(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
-	bool release();
 
 	UINT getSizeVertexList();
 

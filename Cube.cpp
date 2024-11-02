@@ -34,7 +34,6 @@ void Cube::init(Vector3D vel, Vector3D pos)
 		{Vector3D(-0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)}
 	};
 
-	this->vertexBuffer = GraphicsEngine::get()->getRenderSystem()->createVertexBuffer();
 	UINT size_list = ARRAYSIZE(vertex_list);
 
 	unsigned int index_list[] =
@@ -64,10 +63,8 @@ void Cube::init(Vector3D vel, Vector3D pos)
 		1, 0, 7
 	};
 
-	this->indexBuffer = GraphicsEngine::get()->getRenderSystem()->createIndexBuffer();
 	UINT size_index_list = ARRAYSIZE(index_list);
-
-	this->indexBuffer->load(index_list, size_index_list);
+	this->indexBuffer = GraphicsEngine::get()->getRenderSystem()->createIndexBuffer(index_list, size_index_list);
 
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
@@ -75,7 +72,7 @@ void Cube::init(Vector3D vel, Vector3D pos)
 	GraphicsEngine::get()->getRenderSystem()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 
 	this->vertexShader = GraphicsEngine::get()->getRenderSystem()->createVertexShader(shader_byte_code, size_shader);
-	this->vertexBuffer->load(vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+	this->vertexBuffer = GraphicsEngine::get()->getRenderSystem()->createVertexBuffer(vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
 
 	GraphicsEngine::get()->getRenderSystem()->releaseCompiledShader();
 
@@ -88,8 +85,7 @@ void Cube::init(Vector3D vel, Vector3D pos)
 	constant cc;
 	cc.m_time = 0;
 
-	this->constantBuffer = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer();
-	this->constantBuffer->load(&cc, sizeof(constant));
+	this->constantBuffer = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
 }
 
 void Cube::update(float deltaTime, constant cc2)

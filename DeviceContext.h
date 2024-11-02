@@ -8,8 +8,6 @@ public:
 	DeviceContext(ID3D11DeviceContext* device_context, RenderSystem* system);
 	~DeviceContext();
 
-	bool release();
-
 	// Rendering command
 	void clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
 	

@@ -103,11 +103,9 @@ void AppWindow::onCreate()
 	InputSystem::get()->showCursor(false);
 
 	GraphicsEngine::get()->init();
-	this->m_swap_chain = GraphicsEngine::get()->getRenderSystem()->createSwapChain();
-
 	RECT rc = this->getClientWindowRect();
-	this->m_swap_chain->init(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
+	this->m_swap_chain = GraphicsEngine::get()->getRenderSystem()->createSwapChain(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 	this->m_world_cam.setTranslation(Vector3D(0.0f, 0.0f, -2.0f));
 
 	/*
@@ -181,8 +179,7 @@ void AppWindow::onCreate()
 
 	cc.m_time = 0;
 
-	this->m_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer();
-	this->m_cb->load(&cc, sizeof(constant) );
+	this->m_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
 }
 
 void AppWindow::onUpdate()
@@ -227,12 +224,6 @@ void AppWindow::onUpdate()
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	//this->m_vb->release();
-	//this->m_ib->release();
-	this->m_cb->release();
-	this->m_swap_chain->release();
-	//this->m_vs->release();
-	//this->m_ps->release();
 	GraphicsEngine::get()->release();
 }
 
