@@ -87,6 +87,11 @@ SwapChain* RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)
 	return sc;
 }
 
+ID3D11Device* RenderSystem::getDevice()
+{
+	return this->m_d3d_Device;
+}
+
 DeviceContext* RenderSystem::getImmediateDeviceContext()
 {
 	return this->m_imm_device_context;

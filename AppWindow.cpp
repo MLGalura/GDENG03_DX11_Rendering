@@ -4,6 +4,9 @@
 #include "Matrix4x4.h"
 
 #include "InputSystem.h"
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
 
 struct vertex {
 	Vector3D position;
@@ -100,7 +103,7 @@ AppWindow::~AppWindow()
 void AppWindow::onCreate()
 {
 	InputSystem::get()->addListener(this);
-	InputSystem::get()->showCursor(false);
+	InputSystem::get()->showCursor(true);
 
 	GraphicsEngine::get()->init();
 	RECT rc = this->getClientWindowRect();
@@ -178,8 +181,13 @@ void AppWindow::onCreate()
 	this->m_cube->init(Vector3D(5.0f, 0.0f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f));
 
 	cc.m_time = 0;
-
 	this->m_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
+
+	ImGui::CreateContext();
+	ImGui_ImplWin32_Init(this->m_HWND);
+	ImGui_ImplDX11_Init(GraphicsEngine::get()->getRenderSystem()->getDevice(), GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->GetDeviceContext());
+
+	
 }
 
 void AppWindow::onUpdate()
@@ -200,6 +208,14 @@ void AppWindow::onUpdate()
 	this->m_cube->update(this->m_delta_time, this->cc);
 	this->m_cube->draw();
 
+	ImGui_ImplDX11_NewFrame(); 
+	ImGui_ImplWin32_NewFrame(); 
+	ImGui::NewFrame(); 
+
+	ImGui::ShowDemoWindow(); 
+	ImGui::Render(); 
+
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData()); 
 	
 	/*GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);
@@ -257,10 +273,10 @@ void AppWindow::onMouseMove(const Point& mouse_pos)
 	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
 	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
 
-	this->m_rot_x += (mouse_pos.m_y - (height / 2.0f)) * this->m_delta_time * 0.1f;
-	this->m_rot_y += (mouse_pos.m_x - (width / 2.0f)) * this->m_delta_time * 0.1f;
+	//this->m_rot_x += (mouse_pos.m_y - (height / 2.0f)) * this->m_delta_time * 0.1f;
+	//this->m_rot_y += (mouse_pos.m_x - (width / 2.0f)) * this->m_delta_time * 0.1f;
 
-	InputSystem::get()->setCursorPosition(Point(width / 2.0f, height / 2.0f));
+	//InputSystem::get()->setCursorPosition(Point(width / 2.0f, height / 2.0f));
 }
 
 void AppWindow::onFocus()

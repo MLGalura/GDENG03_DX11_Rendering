@@ -26,6 +26,8 @@ public:
 	void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 	void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
 
+	ID3D11DeviceContext* GetDeviceContext();
+
 private:
 	ID3D11DeviceContext* m_device_context;
 	RenderSystem* m_system = nullptr;

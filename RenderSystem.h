@@ -20,6 +20,7 @@ public:
 
 public:
 	SwapChain* createSwapChain(HWND hwnd, UINT width, UINT height);
+	ID3D11Device* getDevice();
 	DeviceContext* getImmediateDeviceContext();
 	VertexBuffer* createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
 	IndexBuffer* createIndexBuffer(void* list_indices, UINT size_list);
