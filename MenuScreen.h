@@ -12,5 +12,8 @@ protected:
 
 private:
 	void ShowMenuFile();
+
+	bool showCredits = false;
+	bool showColor = false;
 };
 

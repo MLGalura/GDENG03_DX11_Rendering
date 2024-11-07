@@ -82,6 +82,15 @@
     <ClCompile Include="ProfilerScreen.cpp">
       <Filter>GameEngine\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -186,6 +195,15 @@
     <ClInclude Include="ProfilerScreen.h">
       <Filter>GameEngine\UI</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -238,6 +256,9 @@
     </Filter>
     <Filter Include="GameEngine\UI">
       <UniqueIdentifier>{d894f0a7-80d0-46aa-8aaf-fdde79203713}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\ResourceManager">
+      <UniqueIdentifier>{e2499ee5-5643-419d-a193-15fe98cb1ae2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
