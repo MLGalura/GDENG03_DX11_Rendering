@@ -4,6 +4,7 @@
 #include "Matrix4x4.h"
 
 #include "InputSystem.h"
+#include "UIManager.h"
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
@@ -183,9 +184,8 @@ void AppWindow::onCreate()
 	cc.m_time = 0;
 	this->m_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
 
-	ImGui::CreateContext();
-	ImGui_ImplWin32_Init(this->m_HWND);
-	ImGui_ImplDX11_Init(GraphicsEngine::get()->getRenderSystem()->getDevice(), GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->GetDeviceContext());
+	UIManager::Initialize(this->m_HWND);
+
 
 	
 }
@@ -208,14 +208,24 @@ void AppWindow::onUpdate()
 	this->m_cube->update(this->m_delta_time, this->cc);
 	this->m_cube->draw();
 
-	ImGui_ImplDX11_NewFrame(); 
+	
+
+	UIManager::DrawAllUI();
+	/*ImGui_ImplDX11_NewFrame(); 
 	ImGui_ImplWin32_NewFrame(); 
 	ImGui::NewFrame(); 
 
 	ImGui::ShowDemoWindow(); 
+
+
+	ImGui::Begin("Credits");
+
+
+	ImGui::ColorPicker4("Color", color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_PickerHueWheel);
+	ImGui::End();
 	ImGui::Render(); 
 
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData()); 
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData()); */
 	
 	/*GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_vs, this->m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(this->m_ps, this->m_cb);

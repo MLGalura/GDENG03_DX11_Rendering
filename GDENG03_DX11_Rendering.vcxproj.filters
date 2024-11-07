@@ -43,6 +43,45 @@
     <ClCompile Include="RenderSystem.cpp">
       <Filter>GameEngine\GraphicsEngine\RenderSystem</Filter>
     </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIScreen.cpp">
+      <Filter>GameEngine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>GameEngine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyScreen.cpp">
+      <Filter>GameEngine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="InspectorScreen.cpp">
+      <Filter>GameEngine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScreen.cpp">
+      <Filter>GameEngine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilerScreen.cpp">
+      <Filter>GameEngine\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -102,6 +141,51 @@
     <ClInclude Include="Prerequisites.h">
       <Filter>GameEngine\GraphicsEngine</Filter>
     </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>GameEngine\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIScreen.h">
+      <Filter>GameEngine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UINames.h">
+      <Filter>GameEngine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>GameEngine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchyScreen.h">
+      <Filter>GameEngine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="InspectorScreen.h">
+      <Filter>GameEngine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScreen.h">
+      <Filter>GameEngine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilerScreen.h">
+      <Filter>GameEngine\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -148,6 +232,12 @@
     </Filter>
     <Filter Include="GameEngine\GraphicsEngine\RenderSystem\DeviceContext">
       <UniqueIdentifier>{1a4e6530-e712-4ea8-86ae-5407cd2774a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\IMGUI">
+      <UniqueIdentifier>{95917ff8-7031-4adf-9a89-c27b3dcc5eed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\UI">
+      <UniqueIdentifier>{d894f0a7-80d0-46aa-8aaf-fdde79203713}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

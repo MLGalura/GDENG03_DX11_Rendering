@@ -11,3 +11,4 @@ class PixelShader;
 
 class RenderSystem;
 class GraphicsEngine;
+class UIManager;
