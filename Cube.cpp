@@ -5,8 +5,7 @@
 
 struct vertex {
 	Vector3D position;
-	Vector3D color;
-	Vector3D color1;
+	Vector2D texcoord;
 };
 
 Cube::Cube()
@@ -20,18 +19,61 @@ Cube::~Cube()
 
 void Cube::init(Vector3D vel, Vector3D pos)
 {
-	vertex vertex_list[] = {
+	m_wood_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\Wood.jpg");
+
+	Vector3D position_list[] = {
 		// FRONT FACE
-		{Vector3D(-0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
-		{Vector3D(-0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 0),	Vector3D(0.2f, 0.2f, 1)},
-		{Vector3D(0.5f, 0.5f, -0.5f),	Vector3D(1, 1, 0),	Vector3D(0.2f, 0.2f, 0)},
-		{Vector3D(0.5f, -0.5f, -0.5f),	Vector3D(1, 0, 0),	Vector3D(0.2f, 0, 0)},
+		{Vector3D(-0.5f, -0.5f, -0.5f)},
+		{Vector3D(-0.5f, 0.5f, -0.5f)},
+		{Vector3D(0.5f, 0.5f, -0.5f)},
+		{Vector3D(0.5f, -0.5f, -0.5f)},
 
 		// BACK FACE
-		{Vector3D(0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)},
-		{Vector3D(0.5f, 0.5f, 0.5f),	Vector3D(0, 1, 1),	Vector3D(0, 0.2f, 0.2f)},
-		{Vector3D(-0.5f, 0.5f, 0.5f),	Vector3D(0, 1, 1),	Vector3D(0, 0.2f, 0.2f)},
-		{Vector3D(-0.5f, -0.5f, 0.5f),	Vector3D(0, 1, 0),	Vector3D(0, 0.2f, 0)}
+		{Vector3D(0.5f, -0.5f, 0.5f)},
+		{Vector3D(0.5f, 0.5f, 0.5f)},
+		{Vector3D(-0.5f, 0.5f, 0.5f)},
+		{Vector3D(-0.5f, -0.5f, 0.5f)}
+	};
+
+	Vector2D texcoord_list[] = {
+		{Vector2D(0.0f, 0.0f)},
+		{Vector2D(0.0f, 1.0f)},
+		{Vector2D(1.0f, 0.0f)},
+		{Vector2D(1.0f, 1.0f)},
+	};
+
+	vertex vertex_list[] = {
+		// FRONT FACE
+		{ position_list[0], texcoord_list[1] },
+		{ position_list[1], texcoord_list[0] },
+		{ position_list[2], texcoord_list[2] },
+		{ position_list[3], texcoord_list[3] },
+		
+		// BACK FACE
+		{ position_list[4], texcoord_list[1] },
+		{ position_list[5], texcoord_list[0] },
+		{ position_list[6], texcoord_list[2] },
+		{ position_list[7], texcoord_list[3] },
+
+		{ position_list[1], texcoord_list[1] },
+		{ position_list[6], texcoord_list[0] },
+		{ position_list[5], texcoord_list[2] },
+		{ position_list[2], texcoord_list[3] },
+
+		{ position_list[7], texcoord_list[1] },
+		{ position_list[0], texcoord_list[0] },
+		{ position_list[3], texcoord_list[2] },
+		{ position_list[4], texcoord_list[3] },
+
+		{ position_list[3], texcoord_list[1] },
+		{ position_list[2], texcoord_list[0] },
+		{ position_list[5], texcoord_list[2] },
+		{ position_list[4], texcoord_list[3] },
+
+		{ position_list[7], texcoord_list[1] },
+		{ position_list[6], texcoord_list[0] },
+		{ position_list[1], texcoord_list[2] },
+		{ position_list[0], texcoord_list[3] },
 	};
 
 	UINT size_list = ARRAYSIZE(vertex_list);
@@ -47,20 +89,20 @@ void Cube::init(Vector3D vel, Vector3D pos)
 		6, 7, 4,
 
 		// TOP SIDE
-		1, 6, 5,
-		5, 2, 1,
+		8, 9, 10,
+		10, 11, 8,
 
 		// BOTTOM SIDE
-		7, 0, 3,
-		3, 4, 7,
+		12, 13, 14,
+		14, 15, 12,
 
 		// RIGHT SIDE
-		3, 2, 5,
-		5, 4, 3,
+		16, 17, 18,
+		18, 19, 16,
 
 		// LEFT SIDE
-		7, 6, 1,
-		1, 0, 7
+		20, 21, 22,
+		22, 23, 20
 	};
 
 	UINT size_index_list = ARRAYSIZE(index_list);
@@ -110,6 +152,8 @@ void Cube::draw()
 
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setVertexShader(this->vertexShader);
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setPixelShader(this->pixelShader);
+
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setTexture(this->pixelShader, this->m_wood_tex);
 
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setVertexBuffer(this->vertexBuffer);
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setIndexBuffer(this->indexBuffer);

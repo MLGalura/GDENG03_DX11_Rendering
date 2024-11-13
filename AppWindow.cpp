@@ -1,5 +1,6 @@
 #include "AppWindow.h"
 #include <Windows.h>
+#include "Vector2D.h"
 #include "Vector3D.h"
 #include "Matrix4x4.h"
 
@@ -11,8 +12,7 @@
 
 struct vertex {
 	Vector3D position;
-	Vector3D color;
-	Vector3D color1;
+	Vector2D texcoord;
 };
 
 
@@ -105,8 +105,6 @@ void AppWindow::onCreate()
 {
 	InputSystem::get()->addListener(this);
 	InputSystem::get()->showCursor(true);
-
-	TexturePtr m_wood_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\Wood.jpg");
 
 	RECT rc = this->getClientWindowRect();
 

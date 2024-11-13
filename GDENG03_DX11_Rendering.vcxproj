@@ -199,6 +199,7 @@
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UINames.h" />
     <ClInclude Include="UIScreen.h" />
+    <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Vector4D.h" />
     <ClInclude Include="VertexBuffer.h" />

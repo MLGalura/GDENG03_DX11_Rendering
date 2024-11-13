@@ -6,6 +6,7 @@
 #include "PixelShader.h"
 #include "DeviceContext.h"
 
+#include "Vector2D.h"
 #include "Vector3D.h"
 #include "Matrix4x4.h"
 
@@ -39,6 +40,8 @@ private:
 
 	VertexShaderPtr vertexShader;
 	PixelShaderPtr pixelShader;
+
+	TexturePtr m_wood_tex;
 
 	Vector3D animSpeed;
 
