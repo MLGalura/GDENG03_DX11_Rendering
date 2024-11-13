@@ -14,8 +14,9 @@ GraphicsEngine::GraphicsEngine()
 	catch (...) { throw std::exception("Render System not made successfully"); }
 }
 
-GraphicsEngine::~GraphicsEngine()
+GraphicsEngine::~GraphicsEngine() 
 {
+	GraphicsEngine::m_engine = nullptr;
 	delete this->m_render_system;
 }
 
