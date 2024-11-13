@@ -1,25 +1,9 @@
 #include "Cube.h"
-#include "GraphicsEngine.h"
-
 #include <Windows.h>
 
-struct vertex {
-	Vector3D position;
-	Vector2D texcoord;
-};
-
-Cube::Cube()
+Cube::Cube(std::string name, void* shaderBytes, size_t shaderSize) : GameObject(name) 
 {
-
-}
-
-Cube::~Cube()
-{
-}
-
-void Cube::init(Vector3D vel, Vector3D pos)
-{
-	m_wood_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\Wood.jpg");
+	tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\Wood.jpg");
 
 	Vector3D position_list[] = {
 		// FRONT FACE
@@ -48,7 +32,7 @@ void Cube::init(Vector3D vel, Vector3D pos)
 		{ position_list[1], texcoord_list[0] },
 		{ position_list[2], texcoord_list[2] },
 		{ position_list[3], texcoord_list[3] },
-		
+
 		// BACK FACE
 		{ position_list[4], texcoord_list[1] },
 		{ position_list[5], texcoord_list[0] },
@@ -125,35 +109,66 @@ void Cube::init(Vector3D vel, Vector3D pos)
 	GraphicsEngine::get()->getRenderSystem()->releaseCompiledShader();
 
 	constant cc;
-	cc.m_time = 0;
+	cc.time = 0;
 
 	this->constantBuffer = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
 }
 
-void Cube::update(float deltaTime, constant cc2)
+Cube::~Cube()
 {
-	constant cc;
-	cc.m_time = ::GetTickCount();
-
-	Matrix4x4 temp;
-	cc.m_world.setIdentity();
-	cc.m_world.setScale(Vector3D(1.0f, 1.0f, 1.0f));
-
-	cc.m_view = cc2.m_view;
-	cc.m_proj = cc2.m_proj;
-
-	this->constantBuffer->update(GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext(), &cc);
 }
 
-void Cube::draw()
+
+
+void Cube::Update(float deltaTime)
 {
+	this->deltaTime = deltaTime;
+	//this->ticks += deltaTime * this->speed;
+
+	this->deltaRot += this->deltaTime * this->speed;
+
+	this->transform.setIdentity();
+	Matrix4x4 temp;
+
+
+	temp.setIdentity();
+	temp.setRotationZ(this->localRotation.m_z);
+	this->transform *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(this->localRotation.m_y);
+	this->transform *= temp;
+
+	temp.setIdentity();
+	temp.setRotationX(this->localRotation.m_x);
+	this->transform *= temp;
+
+	temp.setIdentity();
+	temp.setScale(this->localScale);
+	this->transform *= temp;
+
+	temp.setIdentity();
+	temp.setTranslation(this->localPosition);
+	this->transform *= temp;
+}
+
+void Cube::Draw(Matrix4x4 view, Matrix4x4 proj)
+{
+	constant cc = constant();
+	cc.time = this->ticks;
+	cc.world = this->transform;
+	cc.view = view;
+	cc.proj = proj;
+
+	this->constantBuffer->update(GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext(), &cc);
+
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setConstantBuffer(this->vertexShader, this->constantBuffer);
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setConstantBuffer(this->pixelShader, this->constantBuffer);
 
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setVertexShader(this->vertexShader);
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setPixelShader(this->pixelShader);
 
-	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setTexture(this->pixelShader, this->m_wood_tex);
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setTexture(this->pixelShader, this->tex);
 
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setVertexBuffer(this->vertexBuffer);
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setIndexBuffer(this->indexBuffer);

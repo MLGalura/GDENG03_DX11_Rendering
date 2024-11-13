@@ -1,50 +1,39 @@
 #pragma once
+#include "Prerequisites.h"
+#include "GraphicsEngine.h"
+#include "RenderSystem.h"
+#include "GameObject.h"
+
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
 #include "DeviceContext.h"
+#include "Texture.h"
 
 #include "Vector2D.h"
-#include "Vector3D.h"
-#include "Matrix4x4.h"
+#include "Structs.h"
 
 #include <iostream>
 
-__declspec(align(16))
-struct constant {
-	Matrix4x4 m_world;
-	Matrix4x4 m_view;
-	Matrix4x4 m_proj;
-	unsigned int m_time;
-};
-
-
-class Cube
+class Cube : public GameObject
 {
 public:
-	Cube();
+	Cube(std::string name, void* shaderBytes, size_t shaderSize);
 	~Cube();
 
-public:
-	void init(Vector3D vel, Vector3D pos);
-	void update(float deltaTime, constant cc2);
-	void draw();
-
+	void Update(float deltaTime) override;
+	void Draw(Matrix4x4 view, Matrix4x4 proj) override;
 
 private:
 	VertexBufferPtr vertexBuffer;
 	IndexBufferPtr indexBuffer;
 	ConstantBufferPtr constantBuffer;
 
-	VertexShaderPtr vertexShader;
-	PixelShaderPtr pixelShader;
+	TexturePtr tex;
 
-	TexturePtr m_wood_tex;
-
-	Vector3D animSpeed;
-
-	Vector3D velocity;
-	Vector3D position;
+	float ticks = 0.0f;
+	float deltaPos = 0.0f;
+	float deltaRot = 0.0f;
+	float deltaTime = 0.0f;
+	float speed = 1.0f;
 };

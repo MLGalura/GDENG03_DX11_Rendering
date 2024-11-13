@@ -195,6 +195,7 @@
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />

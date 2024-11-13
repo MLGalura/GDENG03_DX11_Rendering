@@ -18,6 +18,8 @@ class Texture;
 class TextureManager;
 class UIManager;
 
+class GameObject;
+
 typedef std::shared_ptr<SwapChain> SwapChainPtr;
 typedef std::shared_ptr<DeviceContext> DeviceContextPtr;
 typedef std::shared_ptr<VertexBuffer> VertexBufferPtr;

@@ -219,6 +219,9 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
