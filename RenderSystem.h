@@ -12,11 +12,6 @@ public:
 	RenderSystem();
 	~RenderSystem();
 
-	// Initializes the Graphics Engine and the DirectX11 Drive
-	bool init();
-
-	// Releases all the resources loaded
-	bool release();
 
 public:
 	SwapChainPtr createSwapChain(HWND hwnd, UINT width, UINT height);

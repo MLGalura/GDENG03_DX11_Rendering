@@ -2,6 +2,11 @@
 
 int main() 
 {
+	try {
+		GraphicsEngine::create();
+	}
+	catch (...) { return -1; }
+
 	// Initialize the AppWindow
 	AppWindow app;
 	
@@ -12,6 +17,7 @@ int main()
 		}
 	}
 
+	GraphicsEngine::release();
 
 	return 0;
 } 

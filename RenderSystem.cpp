@@ -12,15 +12,6 @@
 
 RenderSystem::RenderSystem()
 {
-
-}
-
-RenderSystem::~RenderSystem()
-{
-}
-
-bool RenderSystem::init()
-{
 	D3D_DRIVER_TYPE driver_types[] = {
 		D3D_DRIVER_TYPE_HARDWARE,
 		D3D_DRIVER_TYPE_WARP,
@@ -45,7 +36,7 @@ bool RenderSystem::init()
 	}
 
 	if (FAILED(res)) {
-		return false;
+		throw std::exception("Render system not created successfully");
 	}
 
 	m_imm_device_context = std::make_shared<DeviceContext>(m_imm_context, this);
@@ -53,11 +44,9 @@ bool RenderSystem::init()
 	this->m_d3d_Device->QueryInterface(__uuidof(IDXGIDevice), (void**)&this->m_dxgi_device);
 	this->m_dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)&this->m_dxgi_adapter);
 	this->m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&this->m_dxgi_factory);
-
-	return true;
 }
 
-bool RenderSystem::release()
+RenderSystem::~RenderSystem()
 {
 	if (m_vs)m_vs->Release();
 	if (m_ps)m_ps->Release();
@@ -70,7 +59,6 @@ bool RenderSystem::release()
 	this->m_dxgi_factory->Release();
 
 	this->m_d3d_Device->Release();
-	return true;
 }
 
 SwapChainPtr RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)
