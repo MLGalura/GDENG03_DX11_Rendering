@@ -7,22 +7,28 @@ GraphicsEngine* GraphicsEngine::m_engine = nullptr;
 
 GraphicsEngine::GraphicsEngine()
 {
-	try
-	{
-		this->m_render_system = new RenderSystem();
-	}
+	try	{ this->m_render_system = new RenderSystem(); }
 	catch (...) { throw std::exception("Render System not made successfully"); }
+
+	try { this->m_tex_manager = new TextureManager(); }
+	catch (...) { throw std::exception("Texture Manager not made successfully"); }
 }
 
 GraphicsEngine::~GraphicsEngine() 
 {
 	GraphicsEngine::m_engine = nullptr;
+	delete this->m_tex_manager;
 	delete this->m_render_system;
 }
 
 RenderSystem* GraphicsEngine::getRenderSystem()
 {
 	return this->m_render_system;
+}
+
+TextureManager* GraphicsEngine::getTextureManager()
+{
+	return this->m_tex_manager;
 }
 
 GraphicsEngine* GraphicsEngine::get()

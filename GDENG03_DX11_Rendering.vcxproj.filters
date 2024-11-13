@@ -88,8 +88,11 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
+    </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,8 +204,11 @@
     <ClInclude Include="Resource.h">
       <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
     </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
+    </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>GameEngine\GraphicsEngine\ResourceManager</Filter>
+      <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +265,9 @@
     </Filter>
     <Filter Include="GameEngine\GraphicsEngine\ResourceManager">
       <UniqueIdentifier>{e2499ee5-5643-419d-a193-15fe98cb1ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\ResourceManager\TextureManager">
+      <UniqueIdentifier>{91dad30d-7527-409c-a5b1-606ea3c9fe2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
