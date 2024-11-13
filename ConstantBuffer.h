@@ -7,7 +7,7 @@ class ConstantBuffer
 public:
 	ConstantBuffer(RenderSystem* system, void* buffer, UINT size_buffer);
 	~ConstantBuffer();
-	void update(DeviceContext* context, void* buffer);
+	void update(DeviceContextPtr context, void* buffer);
 
 private:
 	UINT m_size_vertex;

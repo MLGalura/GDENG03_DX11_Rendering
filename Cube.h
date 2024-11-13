@@ -33,12 +33,12 @@ public:
 
 
 private:
-	VertexBuffer* vertexBuffer;
-	IndexBuffer* indexBuffer;
-	ConstantBuffer* constantBuffer;
+	VertexBufferPtr vertexBuffer;
+	IndexBufferPtr indexBuffer;
+	ConstantBufferPtr constantBuffer;
 
-	VertexShader* vertexShader;
-	PixelShader* pixelShader;
+	VertexShaderPtr vertexShader;
+	PixelShaderPtr pixelShader;
 
 	Vector3D animSpeed;
 
