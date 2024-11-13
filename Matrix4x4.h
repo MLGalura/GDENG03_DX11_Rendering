@@ -72,6 +72,22 @@ public:
 		return det;
 	}
 
+	Vector3D GetRight()
+	{
+		return Vector3D(this->m_mat[0][0], this->m_mat[1][0], this->m_mat[2][0]);
+	}
+
+	Vector3D GetUp()
+	{
+		return Vector3D(this->m_mat[0][1], this->m_mat[1][1], this->m_mat[2][1]);
+	}
+
+	Vector3D GetForward()
+	{
+		return Vector3D(this->m_mat[0][2], this->m_mat[1][2], this->m_mat[2][2]) * -1;
+	}
+
+
 	void inverse()
 	{
 		int a, i, j;

@@ -137,6 +137,7 @@
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DeviceContext.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="HierarchyScreen.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DeviceContext.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="HierarchyScreen.h" />
     <ClInclude Include="imconfig.h" />

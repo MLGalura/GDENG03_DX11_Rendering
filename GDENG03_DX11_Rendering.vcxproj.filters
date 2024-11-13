@@ -94,6 +94,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>GameEngine\GraphicsEngine\ResourceManager\TextureManager</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -212,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="Vector2D.h">
       <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameEngine\GraphicsEngine\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

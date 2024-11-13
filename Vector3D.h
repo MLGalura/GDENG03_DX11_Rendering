@@ -25,6 +25,14 @@ public:
 		return v;
 	}
 
+	static Vector3D Zero() {
+		return Vector3D(0.0f, 0.0f, 0.0f);
+	}
+	
+	static Vector3D One() {
+		return Vector3D(1.0f, 1.0f, 1.0f);
+	}
+
 	Vector3D operator *(float num)
 	{
 		return Vector3D(this->m_x * num, this->m_y * num, this->m_z * num);
