@@ -9,6 +9,7 @@
 #include "ConstantBuffer.h"
 #include "DeviceContext.h"
 #include "Texture.h"
+#include "Mesh.h"
 
 #include "Vector2D.h"
 #include "Structs.h"
@@ -30,6 +31,7 @@ private:
 	ConstantBufferPtr constantBuffer;
 
 	TexturePtr tex;
+	MeshPtr mesh; // TEMP
 
 	float ticks = 0.0f;
 	float deltaPos = 0.0f;

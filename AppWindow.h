@@ -38,6 +38,9 @@ private:
 	PixelShaderPtr m_ps;
 	ConstantBufferPtr m_cb;
 
+	TexturePtr m_tex;
+	MeshPtr m_mesh;
+
 private:
 	Cube* m_cube = nullptr;
 	constant cc;
