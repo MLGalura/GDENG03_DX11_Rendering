@@ -80,7 +80,10 @@ void AppWindow::onCreate()
 	this->m_world_cam.setTranslation(Vector3D(0.0f, 0.0f, -2.0f));
 
 
-	this->m_cube = new Cube("text", nullptr, NULL); 
+	this->obj = new Object("Teapot", nullptr, NULL); 
+	this->obj->SetTexture(L"Assets\\Textures\\brick.png"); 
+	this->obj->SetMesh(L"Assets\\Meshes\\teapot.obj");
+	
 
 	cc.time = 0;
 	this->m_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
@@ -106,8 +109,8 @@ void AppWindow::onUpdate()
 
 	this->update();
 
-	this->m_cube->Update(this->m_delta_time);
-	this->m_cube->Draw(this->cc.view, this->cc.proj);
+	this->obj->Update(this->m_delta_time);
+	this->obj->Draw(this->cc.view, this->cc.proj);
 
 	UIManager::DrawAllUI();
 

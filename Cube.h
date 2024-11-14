@@ -31,7 +31,6 @@ private:
 	ConstantBufferPtr constantBuffer;
 
 	TexturePtr tex;
-	MeshPtr mesh; // TEMP
 
 	float ticks = 0.0f;
 	float deltaPos = 0.0f;

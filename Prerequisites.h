@@ -21,7 +21,7 @@ class MeshManager;
 class UIManager;
 
 class GameObject;
-//class Object;
+class Object;
 
 typedef std::shared_ptr<SwapChain> SwapChainPtr;
 typedef std::shared_ptr<DeviceContext> DeviceContextPtr;

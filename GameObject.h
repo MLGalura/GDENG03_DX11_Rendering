@@ -6,6 +6,7 @@
 
 #include "Vector3D.h"
 #include "Matrix4x4.h"
+#include "Texture.h"
 
 #include <string>
 #include <vector>
@@ -47,12 +48,15 @@ public:
 	GameObject* GetChild(int index);
 	std::vector<GameObject*> GetChildren();
 
+	virtual void SetTexture(const wchar_t* file_path);
+
 	bool IsEnabled() const;
 	void setEnabled(bool enabled);
 
 public:
 	PixelShaderPtr GetPixelShader();
 	VertexShaderPtr GetVertexShader();
+	TexturePtr GetTexture();
 
 	void SetPixelShader(PixelShaderPtr pixelShader);
 	void SetVertexShader(VertexShaderPtr vertexShader);
@@ -65,6 +69,7 @@ protected:
 	Vector3D localRotation;
 
 	Matrix4x4 transform;
+	TexturePtr tex;
 
 	GameObject* parent;
 	std::vector<GameObject*> children;

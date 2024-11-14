@@ -15,6 +15,7 @@
 #include "InputListener.h"
 
 #include "Cube.h"
+#include "Object.h"
 
 class AppWindow : public Window, public InputListener
 {
@@ -42,7 +43,9 @@ private:
 	MeshPtr m_mesh;
 
 private:
-	Cube* m_cube = nullptr;
+	Object* obj = nullptr;
+	Object* obj1 = nullptr;
+	Object* obj2 = nullptr;
 	constant cc;
 
 private:

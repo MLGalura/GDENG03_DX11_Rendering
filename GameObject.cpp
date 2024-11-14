@@ -7,6 +7,7 @@ GameObject::GameObject(std::string name)
     this->localRotation = Vector3D::Zero();
     this->localScale = Vector3D::One();
     this->transform.setIdentity();
+    this->tex = nullptr;
     this->parent = NULL;
     this->enabled = true;
     this->vertexShader = NULL;
@@ -113,6 +114,12 @@ std::vector<GameObject*> GameObject::GetChildren()
     return this->children;
 }
 
+void GameObject::SetTexture(const wchar_t* file_path)
+{
+    this->tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(file_path);
+    if (!tex) throw std::exception("No texture created");
+}
+
 bool GameObject::IsEnabled() const
 {
     return this->enabled;
@@ -132,6 +139,11 @@ PixelShaderPtr GameObject::GetPixelShader()
 VertexShaderPtr GameObject::GetVertexShader()
 {
     return this->vertexShader;
+}
+
+TexturePtr GameObject::GetTexture()
+{
+    return this->tex;
 }
 
 void GameObject::SetPixelShader(PixelShaderPtr pixelShader)
